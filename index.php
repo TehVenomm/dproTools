@@ -249,18 +249,15 @@
 
         if ($jsonResponse["error"] == 0){
             $presents = $jsonResponse["result"]["presents"];
-            $redeemed = false;
             $uniqIdArray = array();
             foreach ($presents as $entry){
                 //Is tablet
                 if (preg_match("/(\sTablet\sx\s1)/", $entry["name"]) && $entry["type"] == 3 ){
                     $uniqIdArray[$entry["name"]] = $entry["uniqId"];
-                    println($entry["name"].' -> '.$entry["uniqId"].';');
                 }
                 //Is Magi
                 if (preg_match("/(Lv1\sx\s1)/", $entry["name"]) && $entry["type"] == 5 ){
                     $uniqIdArray[$entry["name"]] = $entry["uniqId"];
-                    println($entry["name"].' -> '.$entry["uniqId"].';');
                 }
             }
 
@@ -276,22 +273,36 @@
 
     function listRelevantItemsProcess($startingPage, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
-        for($i = $startingPage; $i <= ($startingPage+1000); $i){
-            $status = redeemGiftBoxItems($i, $defaultIV, $userHash, $cookie, $curl);
+        for($i = $startingPage; $i <= ($startingPage+6000); $i){
+            $status = listRelevantItems($i, $defaultIV, $userHash, $cookie, $curl);
 
             if (is_null($status)){
-                println('');
-                println("ERRO PAGINA ".$i." ABORTANDO");
+                $log = "\nERRO PAGINA ".$i." ABORTANDO";
+                println($log);
+                file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
                 break;
             }
 
+            if($status != false){
+                print "\n";
+                foreach ($status as $key=>$value)
+                {
+                    $log = "(".$key.") ID: ".$value.";";
+                    println($log);
+                    file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
+                }
+            }
+
+            $log = $i."<-";
+            println($log);
+            file_put_contents('./log_'.date("j.n.Y").'.txt', $log, FILE_APPEND);
             $i++; //Acabou os items coletaveis, prox pagina
-            println('');
-            println($i."<- Pg Processada");
+
         }
 
-        println('');
-        println("Ultima página processada: ".$i);
+        $log = "\nUltima página processada: ".$i;
+        println($log);
+        file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
     }
 
     switch ($argv[1]){
