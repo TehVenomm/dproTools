@@ -83,7 +83,7 @@
         if (is_null($curl)){
             $curl = curl_init();
         }
-        
+
         $rcToken1 = genRcToken();
         $body = "app=rob&rcToken=$rcToken1";
 
@@ -213,7 +213,7 @@
 
     function redeemProcessStart($startingPage, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
-        for($i = $startingPage; $i <= ($startingPage+1000); $i){
+        for($i = $startingPage; $i <= ($startingPage+6000); $i){
             $status = redeemGiftBoxItems($i, $defaultIV, $userHash, $cookie, $curl);
             if (is_null($status)){
                 println('');
@@ -236,8 +236,78 @@
         println("Ultima página processada: ".$i);
     }
 
-    if (isset($argv[1])){
-        redeemProcessStart($argv[1], $defaultIV, $userHash, $cookie);
-    } else  {
-        redeemProcessStart(0, $defaultIV, $userHash, $cookie);
+    function listRelevantItems($page, $defaultIV, $userHash, $cookie, $curl){
+        $plainRequest = '{"page":'.$page.'}';
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $response = requestTemplate($encryptedRequestHash, 'present/list', $cookie, $curl);
+
+        if (is_null($response)) {
+            return null; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0){
+            $presents = $jsonResponse["result"]["presents"];
+            $redeemed = false;
+            $uniqIdArray = array();
+            foreach ($presents as $entry){
+                //Is tablet
+                if (preg_match("/(\sTablet\sx\s1)/", $entry["name"]) && $entry["type"] == 3 ){
+                    $uniqIdArray[$entry["name"]] = $entry["uniqId"];
+                    println($entry["name"].' -> '.$entry["uniqId"].';');
+                }
+                //Is Magi
+                if (preg_match("/(Lv1\sx\s1)/", $entry["name"]) && $entry["type"] == 5 ){
+                    $uniqIdArray[$entry["name"]] = $entry["uniqId"];
+                    println($entry["name"].' -> '.$entry["uniqId"].';');
+                }
+            }
+
+            if(!empty($uniqIdArray)){
+                return $uniqIdArray;
+            } else {
+                return false; //No item to be redeemed in this page
+            }
+        } else {
+            return null;
+        }
+    }
+
+    function listRelevantItemsProcess($startingPage, $defaultIV, $userHash, $cookie){
+        $curl = curl_init();
+        for($i = $startingPage; $i <= ($startingPage+1000); $i){
+            $status = redeemGiftBoxItems($i, $defaultIV, $userHash, $cookie, $curl);
+
+            if (is_null($status)){
+                println('');
+                println("ERRO PAGINA ".$i." ABORTANDO");
+                break;
+            }
+
+            $i++; //Acabou os items coletaveis, prox pagina
+            println('');
+            println($i."<- Pg Processada");
+        }
+
+        println('');
+        println("Ultima página processada: ".$i);
+    }
+
+    switch ($argv[1]){
+        case "redeemItems":
+            if (isset($argv[2])){
+                redeemProcessStart($argv[2], $defaultIV, $userHash, $cookie);
+            } else  {
+                redeemProcessStart(0, $defaultIV, $userHash, $cookie);
+            }
+
+        break;
+        case "listRelevantItems":
+            if (isset($argv[2])){
+                listRelevantItemsProcess($argv[2], $defaultIV, $userHash, $cookie);
+            } else  {
+                listRelevantItemsProcess(0, $defaultIV, $userHash, $cookie);
+            }
+        break;
     }
