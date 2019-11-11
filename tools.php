@@ -79,8 +79,11 @@
     //cUrl template to be used as needed, since all relevant requests are the same anyway.
     //Differences are few but treated within.
     //Returns raw server response. Server errors return null and need to be addressed as they come.
-    function requestTemplate($data = null, $endpoint, $cookie){
-        $curl = curl_init();
+    function requestTemplate($data = null, $endpoint, $cookie, $curl = null){
+        if (is_null($curl)){
+            $curl = curl_init();
+        }
+        
         $rcToken1 = genRcToken();
         $body = "app=rob&rcToken=$rcToken1";
 
@@ -141,10 +144,10 @@
 
     /* -----============== Complex Tasks ==============----- */
     //Unit testing.
-    function redeemGiftBoxItems($page, $defaultIV, $userHash, $cookie){
+    function redeemGiftBoxItems($page, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"page":'.$page.'}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
-        $response = requestTemplate($encryptedRequestHash, 'present/list', $cookie);
+        $response = requestTemplate($encryptedRequestHash, 'present/list', $cookie, $curl);
 
         if (is_null($response)) {
             return null; //Server Error
@@ -189,7 +192,7 @@
                 );
 
                 $encryptedRequestHash = userToServerEncrypt(json_encode($requestArray), $defaultIV, $userHash);
-                $response = requestTemplate($encryptedRequestHash, 'present/receive', $cookie);
+                $response = requestTemplate($encryptedRequestHash, 'present/receive', $cookie, $curl);
 
                 if (is_null($response)) {
                     return null; //Server Error
@@ -209,15 +212,15 @@
     }
 
     function redeemProcessStart($startingPage, $defaultIV, $userHash, $cookie){
-        for($i = $startingPage; $i <= ($startingPage+100); $i){
-            $status = redeemGiftBoxItems($i, $defaultIV, $userHash, $cookie);
+        $curl = curl_init();
+        for($i = $startingPage; $i <= ($startingPage+1000); $i){
+            $status = redeemGiftBoxItems($i, $defaultIV, $userHash, $cookie, $curl);
             if (is_null($status)){
                 println('');
                 println("ERRO PAGINA ".$i." ABORTANDO");
                 break;
             }
 
-            println('');
             print ".";
 
             if ($status){ //Ainda tem item para coletar, não mudar de pagina.
@@ -225,6 +228,7 @@
             }
 
             $i++; //Acabou os items coletaveis, prox pagina
+            println('');
             println($i."<- Pg Processada");
         }
 
