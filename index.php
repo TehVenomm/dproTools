@@ -1,7 +1,7 @@
 <?php
-    $defaultIV = '';
-    $userHash = '';
-    $cookie = '';
+    $defaultIV = getenv('IV');;
+    $userHash = getenv('KEY');;
+    $cookie = getenv('COOKIE');;
 
     /* -----============== Basic tools ==============----- */
     function println ($string_message) {
