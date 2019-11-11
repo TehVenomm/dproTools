@@ -288,13 +288,13 @@
                 foreach ($status as $key=>$value)
                 {
                     $log = "(".$key.") ID: ".$value.";";
-                    println($log);
-                    file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
+                    println('\n'.$log);
+                    file_put_contents('./log_'.date("j.n.Y").'.txt', $log, FILE_APPEND);
                 }
             }
 
             $log = $i."<-";
-            println($log);
+            print($log);
             file_put_contents('./log_'.date("j.n.Y").'.txt', $log, FILE_APPEND);
             $i++; //Acabou os items coletaveis, prox pagina
 
