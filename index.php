@@ -189,8 +189,6 @@
                 if (preg_match("/(Gold)/", $entry["name"]) && $entry["type"] == 2){
                     $redeemed = true;
                     $uniqIdArray[] = $entry["uniqId"]; //comment these once you have enough gold
-                    println($entry["name"]);
-
                     continue;
                 }
                 //Is vault item
@@ -309,6 +307,29 @@
         }
     }
 
+    function chugPotion($chugId, $defaultIV, $userHash, $cookie, $curl){
+        $plainRequest = '{"uid":"'.$chugId.'"}';
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $rerollResult = requestTemplate($encryptedRequestHash, 'inventory/useitem', $cookie, $curl);
+
+        if (is_null($rerollResult)) {
+            println("SERVER ERROR");
+            return true; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($rerollResult, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0){
+           return true;
+        } elseif ($jsonResponse["error"] == 15005) {
+            println($jsonResponse["error"].' Nro '. $chugId.' nao existe.');
+            return true;
+        } else {
+            print $jsonResponse["error"];
+            return null;
+        }
+    }
+
     /* -----============== Process Starters ==============----- */
     function rerollPerfectProcessStart($euid, $aid = null, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
@@ -400,6 +421,26 @@
         println("Ultima página processada: ".$i);
     }
 
+    function chugProcessStart($defaultIV, $userHash, $cookie){
+        $curl = curl_init();
+
+        for($i = 0; $i <= 7500; $i){
+            $status = chugPotion('337205', $defaultIV, $userHash, $cookie, $curl);
+
+            if (is_null($status)){
+                println('');
+                println("ERRO POSICAO ".$i." ABORTANDO");
+                break;
+            }
+
+            $i++; //Acabou os items coletaveis, prox pagina
+            println("GLUG");
+        }
+
+        println('');
+        println("Ultima pocao chugada: ".$i);
+    }
+
     /* -----============== Console Controller ==============----- */
     switch ($argv[1]){
         case "redeemItems":
@@ -424,11 +465,7 @@
                 rerollPerfectProcessStart($argv[2], null,$defaultIV, $userHash, $cookie);
             }
         break;
-        case "holocaust":
-            if (isset($argv[2]) && isset($argv[3])){
-                rerollPerfectProcessStart($argv[2], $argv[3], $defaultIV, $userHash, $cookie);
-            } elseif (isset($argv[2])){
-                rerollPerfectProcessStart($argv[2], null,$defaultIV, $userHash, $cookie);
-            }
+        case "chug":
+            chugProcessStart($defaultIV, $userHash, $cookie);
         break;
     }
