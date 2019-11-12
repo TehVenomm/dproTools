@@ -1,5 +1,6 @@
 <?php
-    $defaultIV = getenv('IV');;
+    $defaultIV = getenv('IV');
+    $userHash = getenv('KEY');
     $cookie = getenv('COOKIE');
 
     /* -----============== Basic tools ==============----- */
