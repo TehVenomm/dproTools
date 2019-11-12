@@ -1,7 +1,6 @@
 <?php
     $defaultIV = getenv('IV');;
-    $userHash = getenv('KEY');;
-    $cookie = getenv('COOKIE');;
+    $cookie = getenv('COOKIE');
 
     /* -----============== Basic tools ==============----- */
     function println ($string_message) {
@@ -143,13 +142,13 @@
     }
 
     /* -----============== Complex Tasks ==============----- */
-    //Unit testing.
     function redeemGiftBoxItems($page, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"page":'.$page.'}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
         $response = requestTemplate($encryptedRequestHash, 'present/list', $cookie, $curl);
 
         if (is_null($response)) {
+            println("ERRO SERVER");
             return null; //Server Error
         }
 
@@ -177,8 +176,24 @@
                 if (preg_match("/(Gems)/", $entry["name"]) && $entry["type"] == 1 ){
                     continue;
                 }
+
+                if (preg_match("/(Crystal)/", $entry["name"]) && $entry["type"] == 1 ){
+                    continue;
+                }
+
+                if (preg_match("/(Obtained\sin\sSummon)/", $entry["comment"]) && $entry["type"] == 6 ){
+                    continue;
+                }
+
+                if (preg_match("/(Gold)/", $entry["name"]) && $entry["type"] == 2){
+                    $redeemed = true;
+                    $uniqIdArray[] = $entry["uniqId"]; //comment these once you have enough gold
+                    println($entry["name"]);
+
+                    continue;
+                }
                 //Is vault item
-                if (!$ignored && preg_match("/(Obtained\sfrom\sDragon)/", $entry["comment"]))
+                if (!$ignored /*&& preg_match("/(Obtained\sfrom\sDragon)/", $entry["comment"])*/)
                 {
                     $redeemed = true;
                     $uniqIdArray[] = $entry["uniqId"];
@@ -195,45 +210,27 @@
                 $response = requestTemplate($encryptedRequestHash, 'present/receive', $cookie, $curl);
 
                 if (is_null($response)) {
+                    println("ERRO SERVER");
                     return null; //Server Error
                 }
 
                 $response = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
 
                 if ($response["error"] == 0){
+
                     return true; //Redeemed at least one item successfully
+                } else {
+                    println("ERRO: ".$response["error"]);
+                    println("array: ".jsonPrettify(json_encode($requestArray)));
+                    return null;
                 }
             } else {
                 return false; //No item to be redeemed in this page
             }
         } else {
+            print "ERRO: ".$jsonResponse["error"];
             return null;
         }
-    }
-
-    function redeemProcessStart($startingPage, $defaultIV, $userHash, $cookie){
-        $curl = curl_init();
-        for($i = $startingPage; $i <= ($startingPage+6000); $i){
-            $status = redeemGiftBoxItems($i, $defaultIV, $userHash, $cookie, $curl);
-            if (is_null($status)){
-                println('');
-                println("ERRO PAGINA ".$i." ABORTANDO");
-                break;
-            }
-
-            print ".";
-
-            if ($status){ //Ainda tem item para coletar, não mudar de pagina.
-                continue;
-            }
-
-            $i++; //Acabou os items coletaveis, prox pagina
-            println('');
-            println($i."<- Pg Processada");
-        }
-
-        println('');
-        println("Ultima página processada: ".$i);
     }
 
     function listRelevantItems($page, $defaultIV, $userHash, $cookie, $curl){
@@ -267,7 +264,79 @@
                 return false; //No item to be redeemed in this page
             }
         } else {
+            println("ERRO: ".$jsonResponse["error"]);
             return null;
+        }
+    }
+
+    function rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl){
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $rerollResult = requestTemplate($encryptedRequestHash, 'smith/changeability', $cookie, $curl);
+
+        if (is_null($rerollResult)) {
+            println("SERVER ERROR");
+            return true; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($rerollResult, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0){
+            $abilityResult = $jsonResponse["diff"][0]["equipItem"][0]["update"][0]["ability"];
+
+            $isPerfect = true;
+
+            foreach ($abilityResult as $row){ //Triggers the flag to false if the roll isnt perfect, and prints the selected ability results for viewing
+                if($row["id"] == $aid && $row["pt"] == $maxap){
+                    print '+'.$row["pt"];
+                } else {
+                    if($row["id"] == $aid){
+                        print '+'.$row["pt"];
+                    } else {
+                        print '-'.$row["pt"];
+                    }
+                    $isPerfect = false;
+                }
+                print '/';
+            }
+
+            print "\n";
+
+            return $isPerfect;
+        } else {
+            print $jsonResponse["error"];
+            return $jsonResponse["error"];
+        }
+    }
+
+    /* -----============== Process Starters ==============----- */
+    function rerollPerfectProcessStart($euid, $aid = null, $defaultIV, $userHash, $cookie){
+        $curl = curl_init();
+        $plainRequest = '{"euid":"'.$euid.'"}';
+
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $response = requestTemplate($encryptedRequestHash, 'smith/getabilitylist', $cookie, $curl);
+
+        if (is_null($response)) {
+            return null; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0) {
+            if (is_null($aid)){
+                //Main ability route
+                $aid = $jsonResponse["result"][0]["aid"];
+                $maxap = $jsonResponse["result"][0]["maxap"];
+                $isPerfect = false;
+
+                while ($isPerfect == false){
+                    $isPerfect = rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl);
+                }
+            } else {
+                //Custom ability route
+            }
+        } else {
+            println('ERROR: '.$jsonResponse["error"]);
         }
     }
 
@@ -287,9 +356,9 @@
                 print "\n";
                 foreach ($status as $key=>$value)
                 {
-                    $log = "(".$key.") ID: ".$value.";";
-                    println('\n'.$log);
-                    file_put_contents('./log_'.date("j.n.Y").'.txt', $log, FILE_APPEND);
+                    $log = "\n(".$key.") ID: ".$value.";";
+                    println($log);
+                    file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
                 }
             }
 
@@ -305,6 +374,32 @@
         file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
     }
 
+    function redeemProcessStart($startingPage, $defaultIV, $userHash, $cookie){
+        $curl = curl_init();
+        for($i = $startingPage; $i <= ($startingPage+6000); $i){
+            $status = redeemGiftBoxItems($i, $defaultIV, $userHash, $cookie, $curl);
+            if (is_null($status)){
+                println('');
+                println("ERRO PAGINA ".$i." ABORTANDO");
+                break;
+            }
+
+            print ".";
+
+            if ($status){ //Ainda tem item para coletar, não mudar de pagina.
+                continue;
+            }
+
+            $i++; //Acabou os items coletaveis, prox pagina
+            println('');
+            println($i."<- Pg Processada");
+        }
+
+        println('');
+        println("Ultima página processada: ".$i);
+    }
+
+    /* -----============== Console Controller ==============----- */
     switch ($argv[1]){
         case "redeemItems":
             if (isset($argv[2])){
@@ -319,6 +414,20 @@
                 listRelevantItemsProcess($argv[2], $defaultIV, $userHash, $cookie);
             } else  {
                 listRelevantItemsProcess(0, $defaultIV, $userHash, $cookie);
+            }
+        break;
+        case "rerollPerfectAbility":
+            if (isset($argv[2]) && isset($argv[3])){
+                rerollPerfectProcessStart($argv[2], $argv[3], $defaultIV, $userHash, $cookie);
+            } elseif (isset($argv[2])){
+                rerollPerfectProcessStart($argv[2], null,$defaultIV, $userHash, $cookie);
+            }
+        break;
+        case "holocaust":
+            if (isset($argv[2]) && isset($argv[3])){
+                rerollPerfectProcessStart($argv[2], $argv[3], $defaultIV, $userHash, $cookie);
+            } elseif (isset($argv[2])){
+                rerollPerfectProcessStart($argv[2], null,$defaultIV, $userHash, $cookie);
             }
         break;
     }
