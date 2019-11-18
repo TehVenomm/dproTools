@@ -485,6 +485,29 @@
         }
     }
 
+    function pirateProcessStart($defaultIV, $userHash, $cookie){
+        $curl = curl_init();
+        $encryptedRequestHash = userToServerEncrypt('', $defaultIV, $userHash);
+        $response = requestTemplate($encryptedRequestHash, 'gold/black-market-item-list', $cookie, $curl);
+
+        if (is_null($response)) {
+            return null; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0) {
+            $wares = $jsonResponse["result"]["items"];
+            if (pirateYoink($wares, $defaultIV, $userHash, $cookie, $curl)){
+                println('Yoiked');
+            } else{
+                println('Nothin to yoink at');
+            }
+        } else {
+            println('ERROR: '.$jsonResponse["error"]);
+        }
+    }
+
     /* -----============== Console Controller ==============----- */
     switch ($argv[1]){
         case "redeem":
@@ -513,5 +536,7 @@
             chugProcessStart($defaultIV, $userHash, $cookie);
         case "dupe":
             dupeProcessStart($defaultIV, $userHash, $cookie);
+        case "pirate":
+            pirateProcessStart($defaultIV, $userHash, $cookie);
         break;
     }
