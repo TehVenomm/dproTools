@@ -330,6 +330,23 @@
         }
     }
 
+    function dupePresents($presents, $defaultIV, $userHash, $cookie, $curl){
+        foreach ($presents as $present){
+            $presentId = $present["uniqId"];
+
+            $plainRequest = '{"uids":["'.$presentId.',1", "'.$presentId.',2", "'.$presentId.',3", "'.$presentId.',4", "'.$presentId.',5", "'.$presentId.',6", "'.$presentId.',7", "'.$presentId.',8", "'.$presentId.',9", "'.$presentId.',10"],"page":0}';
+            $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+            $dupeResult = requestTemplate($encryptedRequestHash, 'present/receive', $cookie, $curl);
+
+            println("\nYeeted 10x ".$present["name"]);
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($dupeResult, $defaultIV, $userHash), true);
+        //println($jsonResponse);
+        return $jsonResponse["result"]["list"]["presents"];
+
+    }
+
     /* -----============== Process Starters ==============----- */
     function rerollPerfectProcessStart($euid, $aid = null, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
@@ -441,6 +458,33 @@
         println("Ultima pocao chugada: ".$i);
     }
 
+
+    function dupeProcessStart($defaultIV, $userHash, $cookie){
+        $curl = curl_init();
+        $plainRequest = '{"page":"0"}';
+
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $response = requestTemplate($encryptedRequestHash, 'present/list', $cookie, $curl);
+
+        if (is_null($response)) {
+            return null; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0) {
+            $presents = $jsonResponse["result"]["presents"];
+
+            while (!empty($presents)){
+                $presents = dupePresents($presents, $defaultIV, $userHash, $cookie, $curl);
+            }
+
+            println('This bitch empty yeet');
+        } else {
+            println('ERROR: '.$jsonResponse["error"]);
+        }
+    }
+
     /* -----============== Console Controller ==============----- */
     switch ($argv[1]){
         case "redeemItems":
@@ -467,5 +511,7 @@
         break;
         case "chug":
             chugProcessStart($defaultIV, $userHash, $cookie);
+        case "dupeGiftBox":
+            dupeProcessStart($defaultIV, $userHash, $cookie);
         break;
     }
