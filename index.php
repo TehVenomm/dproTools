@@ -534,8 +534,10 @@
         break;
         case "chug":
             chugProcessStart($defaultIV, $userHash, $cookie);
+        break;
         case "dupe":
             dupeProcessStart($defaultIV, $userHash, $cookie);
+        break;
         case "pirate":
             pirateProcessStart($defaultIV, $userHash, $cookie);
         break;
