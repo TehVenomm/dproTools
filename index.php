@@ -1,7 +1,7 @@
 <?php
-    $defaultIV = getenv('IV');
-    $userHash = getenv('KEY');
-    $cookie = getenv('COOKIE');
+    $defaultIV = 'yCNBH$$rCNGvC+#f';
+    $userHash = '061dd115161aff9d956bba80768c9332';
+    $cookie = 'e1f6a65336c7b896bcbfc0bc06b39099%3A1';
 
     /* -----============== Basic tools ==============----- */
     function println ($string_message) {
@@ -487,7 +487,7 @@
 
     /* -----============== Console Controller ==============----- */
     switch ($argv[1]){
-        case "redeemItems":
+        case "redeem":
             if (isset($argv[2])){
                 redeemProcessStart($argv[2], $defaultIV, $userHash, $cookie);
             } else  {
@@ -495,14 +495,14 @@
             }
 
         break;
-        case "listRelevantItems":
+        case "list":
             if (isset($argv[2])){
                 listRelevantItemsProcess($argv[2], $defaultIV, $userHash, $cookie);
             } else  {
                 listRelevantItemsProcess(0, $defaultIV, $userHash, $cookie);
             }
         break;
-        case "rerollPerfectAbility":
+        case "reroll":
             if (isset($argv[2]) && isset($argv[3])){
                 rerollPerfectProcessStart($argv[2], $argv[3], $defaultIV, $userHash, $cookie);
             } elseif (isset($argv[2])){
@@ -511,7 +511,7 @@
         break;
         case "chug":
             chugProcessStart($defaultIV, $userHash, $cookie);
-        case "dupeGiftBox":
+        case "dupe":
             dupeProcessStart($defaultIV, $userHash, $cookie);
         break;
     }
