@@ -377,7 +377,7 @@
                 $partList[] = $part["regionId"];
             }
 
-            $plainRequestComplete = '{"qt": "'.$qToken.'","breakIds0": ['.implode(',', $partList).'],"breakIds1": [],"breakIds2": [],"breakIds3": [],"breakIds4": [],"memids": [],"mClear": [],"hpRate": 0,"givenDamageList": [],"fieldId": "47548172","logs": [],"actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 0,"weak": 0,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 0,"oraclePairSwords": 0},"deliveryBattleInfo": {"maxDamageSelf": 10000,"totalAttackCount": 50,"attackCount": 50,"totalSkillCountList": [],"mySkillCountList": [],"damageByWeaponList": [],"currentDamageByWeaponList": [],"playerActionInfoList": []},"enemyHp": 10000,"remainSec": 278.5302734375,"elapseSec": 21.4697265625,"dc": 0,"dbc": 0,"pdbc": 0,"rHp": 0,"rSec": 0,"wmwave": 0}';
+            $plainRequestComplete = '{"qt": "'.$qToken.'","breakIds0": [],"breakIds1": [],"breakIds2": [],"breakIds3": [],"breakIds4": [],"memids": [],"mClear": [],"hpRate": 0,"givenDamageList": [],"fieldId": "47548172","logs": [],"actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 0,"weak": 0,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 0,"oraclePairSwords": 0},"deliveryBattleInfo": {"maxDamageSelf": 10000,"totalAttackCount": 50,"attackCount": 50,"totalSkillCountList": [],"mySkillCountList": [],"damageByWeaponList": [],"currentDamageByWeaponList": [],"playerActionInfoList": []},"enemyHp": 10000,"remainSec": 278.5302734375,"elapseSec": 21.4697265625,"dc": 0,"dbc": 0,"pdbc": 0,"rHp": 0,"rSec": 0,"wmwave": 0}';
 
             $encryptedRequestHash2 = userToServerEncrypt($plainRequestComplete, $defaultIV, $userHash);
             $qCompleteReturn = requestTemplate($encryptedRequestHash2, 'quest/complete', $cookie, $curl);
@@ -391,8 +391,8 @@
 
             if ($qStartJsonResponse["error"] != 0){
                 println("8");
-                println($encryptedRequestHash1. "hash1\n");
-                println($encryptedRequestHash2. "hash1\n");
+                println($encryptedRequestHash1." hash1\n");
+                println($encryptedRequestHash2." hash2\n");
                 print $qStartJsonResponse["error"];
                 return null;
             }
