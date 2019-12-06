@@ -355,8 +355,8 @@
 
             $plainRequestStart = '{"qid":'.$qId.',"qt":"'.$qToken.'","setNo":26,"crystalCL":27115,"free":1,"dId":0,"d":"bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed","actioncount":{"revival":0,"guard":0,"counter":0,"lance":0,"combo":0,"chargesword":0,"chargebow":0,"usemagi":0,"weak":0,"weaponweak":0,"death":0,"heatTwoHandSword":0,"heatPairSwords":0,"revengeBurst":0,"justGuard":0,"shadowSealing":0,"jump":0,"soulOneHandSword":0,"soulTwoHandSword":0,"soulSpear":0,"soulPairSwords":0,"soulArrow":0,"burstOneHandSword":0,"thsFullBurst":0,"burstPairSwords":0,"burstSpear":0,"burstArrow":0,"concussion":0,"oracleOneHandSword":0,"oracleSpear":0,"oraclePairSwords":0}}';
 
-            $encryptedRequestHash = userToServerEncrypt($plainRequestStart, $defaultIV, $userHash);
-            $qStartReturn = requestTemplate($encryptedRequestHash, 'quest/start', $cookie, $curl);
+            $encryptedRequestHash1 = userToServerEncrypt($plainRequestStart, $defaultIV, $userHash);
+            $qStartReturn = requestTemplate($encryptedRequestHash1, 'quest/start', $cookie, $curl);
             println("2");
             if (is_null($qStartReturn)) {
                 println("3");
@@ -446,8 +446,8 @@
                 "wmwave": 0
             }';
 
-            $encryptedRequestHash = userToServerEncrypt($plainRequestComplete, $defaultIV, $userHash);
-            $qCompleteReturn = requestTemplate($encryptedRequestHash, 'quest/complete', $cookie, $curl);
+            $encryptedRequestHash2 = userToServerEncrypt($plainRequestComplete, $defaultIV, $userHash);
+            $qCompleteReturn = requestTemplate($encryptedRequestHash2, 'quest/complete', $cookie, $curl);
             println("7");
             if (is_null($qCompleteReturn)) {
                 println("Empty Complete");
@@ -458,9 +458,8 @@
 
             if ($qStartJsonResponse["error"] != 0){
                 println("8");
-                println(jsonPrettify($plainRequestStart));
-                println(jsonPrettify($plainRequestComplete));
-                println(jsonPrettify(json_encode($qStartJsonResponse)));
+                println(jsonPrettify($encryptedRequestHash1. "hash1\n"));
+                println(jsonPrettify($encryptedRequestHash2. "hash1\n"));
                 print $qStartJsonResponse["error"];
                 return null;
             }
