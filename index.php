@@ -106,10 +106,10 @@
                 "Cookie: robpt=$cookie",
                 "Host: appprd.dragonproject.gogame.net",
                 "User-Agent: Dalvik/2.1.0 (Linux; U; Android 9; SM-N9600 Build/PPR1.180610.011)",
-                "X-Unity-Version: 5.6.7f1",
-                "aidx: 105005",
+                "X-Unity-Version: 2018.4.3f1",
+                "aidx: 106005",
                 "amv: 1",
-                "apv: 1.6.7",
+                "apv: 1.8.1",
                 "cdv: -1",
                 "dm: samsung SM-N9600",
                 "tidx: 163",
@@ -347,6 +347,125 @@
 
     }
 
+    function ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl){
+        $questNr = 1;
+        while ($questNr <= $qNum){
+            $qToken = genRcToken();
+
+            $plainRequestStart = '{"qid": '.$qId.',"qt": "'.$qToken.'","setNo": 27,"crystalCL": 0,"free": 1,"dId": 0,"d": "bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ef","actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 0,"weak": 0,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 0,"oraclePairSwords": 0}}';
+
+            $encryptedRequestHash = userToServerEncrypt($plainRequestStart, $defaultIV, $userHash);
+            $qStartReturn = requestTemplate($encryptedRequestHash, 'quest/start', $cookie, $curl);
+
+            if (is_null($qStartReturn)) {
+                println($qStartReturn." response");
+                return true; //Server Error
+            }
+
+            $qStartJsonResponse = json_decode(serverToUserDecrypt($qStartReturn, $defaultIV, $userHash), true);
+
+            if ($qStartJsonResponse["error"] == 0){
+            return true;
+            } else {
+                print $qStartJsonResponse["error"];
+                return null;
+            }
+            
+            $partList = [];
+            foreach($qStartJsonResponse["result"]["enemy"]["reward"] as $part){
+                $partList[] = $part["regionId"];
+            }
+
+            $plainRequestComplete = '{
+                "qt": "'.$qToken.'",
+                "breakIds0": [
+                    '.implode(',', $partList).'
+                ],
+                "breakIds1": [],
+                "breakIds2": [],
+                "breakIds3": [],
+                "breakIds4": [],
+                "memids": [],
+                "mClear": [],
+                "hpRate": 0,
+                "givenDamageList": [],
+                "fieldId": "47548172",
+                "logs": [],
+                "actioncount": {
+                    "revival": 0,
+                    "guard": 0,
+                    "counter": 0,
+                    "lance": 0,
+                    "combo": 0,
+                    "chargesword": 0,
+                    "chargebow": 0,
+                    "usemagi": 0,
+                    "weak": 0,
+                    "weaponweak": 0,
+                    "death": 0,
+                    "heatTwoHandSword": 0,
+                    "heatPairSwords": 0,
+                    "revengeBurst": 0,
+                    "justGuard": 0,
+                    "shadowSealing": 0,
+                    "jump": 0,
+                    "soulOneHandSword": 0,
+                    "soulTwoHandSword": 0,
+                    "soulSpear": 0,
+                    "soulPairSwords": 0,
+                    "soulArrow": 0,
+                    "burstOneHandSword": 0,
+                    "thsFullBurst": 0,
+                    "burstPairSwords": 0,
+                    "burstSpear": 0,
+                    "burstArrow": 0,
+                    "concussion": 0,
+                    "oracleOneHandSword": 0,
+                    "oracleSpear": 0,
+                    "oraclePairSwords": 0
+                },
+                "deliveryBattleInfo": {
+                    "maxDamageSelf": 10000,
+                    "totalAttackCount": 50,
+                    "attackCount": 50,
+                    "totalSkillCountList": [],
+                    "mySkillCountList": [],
+                    "damageByWeaponList": [],
+                    "currentDamageByWeaponList": [],
+                    "playerActionInfoList": []
+                },
+                "enemyHp": 10000,
+                "remainSec": 278.5302734375,
+                "elapseSec": 21.4697265625,
+                "dc": 0,
+                "dbc": 0,
+                "pdbc": 0,
+                "rHp": 0,
+                "rSec": 0,
+                "wmwave": 0
+            }';
+
+            $encryptedRequestHash = userToServerEncrypt($plainRequestComplete, $defaultIV, $userHash);
+            $qCompleteReturn = requestTemplate($encryptedRequestHash, 'quest/complete', $cookie, $curl);
+
+            if (is_null($qCompleteReturn)) {
+                println("Empty Complete");
+                return true; //Server Error
+            }
+
+            $qStartJsonResponse = json_decode(serverToUserDecrypt($qCompleteReturn, $defaultIV, $userHash), true);
+
+            if ($qStartJsonResponse["error"] == 0){
+            return true;
+            } else {
+                print $qStartJsonResponse["error"];
+                return null;
+            }
+            $questNr++;
+            print(".");
+        }
+    }
+
     /* -----============== Process Starters ==============----- */
     function rerollPerfectProcessStart($euid, $aid = null, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
@@ -485,7 +604,38 @@
         }
     }
 
-    function pirateProcessStart($defaultIV, $userHash, $cookie){
+    function massacreProcessStart($defaultIV, $userHash, $cookie){
+        $curl = curl_init();
+
+        $encryptedRequestHash = userToServerEncrypt(null, $defaultIV, $userHash);
+        $response = requestTemplate($encryptedRequestHash, 'quest/list', $cookie, $curl);
+
+        if (is_null($response)) {
+            return null; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0) {
+            $questList = $jsonResponse["result"]["order"];
+
+            println("Starting... First Victim:");
+            
+            foreach($questList as $quest){
+                $qId = $quest["questId"];
+                $qNum = $quest["order"]["num"];
+
+                ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl);
+                println("\nNext victim... Target aquired.");
+            }
+
+            println('Metal Af.');
+        } else {
+            println('ERROR: '.$jsonResponse["error"]);
+        }
+    }
+
+    /*function pirateProcessStart($defaultIV, $userHash, $cookie){
         $curl = curl_init();
         $encryptedRequestHash = userToServerEncrypt('', $defaultIV, $userHash);
         $response = requestTemplate($encryptedRequestHash, 'gold/black-market-item-list', $cookie, $curl);
@@ -506,7 +656,7 @@
         } else {
             println('ERROR: '.$jsonResponse["error"]);
         }
-    }
+    }*/
 
     /* -----============== Console Controller ==============----- */
     switch ($argv[1]){
@@ -538,7 +688,9 @@
         case "dupe":
             dupeProcessStart($defaultIV, $userHash, $cookie);
         break;
-        case "pirate":
-            pirateProcessStart($defaultIV, $userHash, $cookie);
+        /*case "pirate":
+            pirateProcessStart($defaultIV, $userHash, $cookie);*/
+        case "massacre":
+            massacreProcessStart($defaultIV, $userHash, $cookie);
         break;
     }
