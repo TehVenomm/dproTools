@@ -456,6 +456,7 @@
             $qStartJsonResponse = json_decode(serverToUserDecrypt($qCompleteReturn, $defaultIV, $userHash), true);
 
             if ($qStartJsonResponse["error"] != 0){
+                println(jsonPrettify($plainRequestComplete));
                 print $qStartJsonResponse["error"];
                 return null;
             }
