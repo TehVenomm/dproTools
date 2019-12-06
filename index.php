@@ -458,8 +458,8 @@
 
             if ($qStartJsonResponse["error"] != 0){
                 println("8");
-                println(jsonPrettify($encryptedRequestHash1. "hash1\n"));
-                println(jsonPrettify($encryptedRequestHash2. "hash1\n"));
+                println(($encryptedRequestHash1. "hash1\n");
+                println($encryptedRequestHash2. "hash1\n");
                 print $qStartJsonResponse["error"];
                 return null;
             }
