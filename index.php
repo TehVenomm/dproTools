@@ -387,14 +387,14 @@
                 return null; //Server Error
             }
 
-            $qStartJsonResponse = json_decode(serverToUserDecrypt($qCompleteReturn, $defaultIV, $userHash), true);
+            $qcompleteJsonResponse = json_decode(serverToUserDecrypt($qCompleteReturn, $defaultIV, $userHash), true);
 
-            if ($qStartJsonResponse["error"] != 0){
+            if ($qcompleteJsonResponse["error"] != 0){
                 println("8");
                 println($encryptedRequestHash1." hash1\n");
                 println(jsonPrettify(json_encode($qStartJsonResponse))." request1\n");
                 println($encryptedRequestHash2." hash2\n");
-                println(jsonPrettify(json_encode($qStartJsonResponse))." request2\n");
+                println(jsonPrettify(json_encode($qcompleteJsonResponse))." request2\n");
                 print $qStartJsonResponse["error"];
                 return null;
                 
