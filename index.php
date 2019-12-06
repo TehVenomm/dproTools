@@ -353,7 +353,7 @@
         while ($questNr < $qNum){
             $qToken = genRcToken();
 
-            $plainRequestStart = '{"qid": '.$qId.',"qt": "'.$qToken.'","setNo": 27,"crystalCL": 0,"free": 1,"dId": 0,"d": "bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ef","actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 0,"weak": 0,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 0,"oraclePairSwords": 0}}';
+            $plainRequestStart = '{"qid":'.$qId.',"qt":"'.$qToken.'","setNo":26,"crystalCL":27115,"free":1,"dId":0,"d":"bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed","actioncount":{"revival":0,"guard":0,"counter":0,"lance":0,"combo":0,"chargesword":0,"chargebow":0,"usemagi":0,"weak":0,"weaponweak":0,"death":0,"heatTwoHandSword":0,"heatPairSwords":0,"revengeBurst":0,"justGuard":0,"shadowSealing":0,"jump":0,"soulOneHandSword":0,"soulTwoHandSword":0,"soulSpear":0,"soulPairSwords":0,"soulArrow":0,"burstOneHandSword":0,"thsFullBurst":0,"burstPairSwords":0,"burstSpear":0,"burstArrow":0,"concussion":0,"oracleOneHandSword":0,"oracleSpear":0,"oraclePairSwords":0}}';
 
             $encryptedRequestHash = userToServerEncrypt($plainRequestStart, $defaultIV, $userHash);
             $qStartReturn = requestTemplate($encryptedRequestHash, 'quest/start', $cookie, $curl);
@@ -363,14 +363,15 @@
                 println("Server Error");
                 return null; //Server Error
             }
-
+            println("4");
             $qStartJsonResponse = json_decode(serverToUserDecrypt($qStartReturn, $defaultIV, $userHash), true);
 
             if ($qStartJsonResponse["error"] != 0){
+                println("5");
                 print $qStartJsonResponse["error"];
                 return null;
             }
-            
+            println("6");
             $partList = [];
             foreach($qStartJsonResponse["result"]["enemy"][0]["reward"] as $part){
                 $partList[] = $part["regionId"];
@@ -447,7 +448,7 @@
 
             $encryptedRequestHash = userToServerEncrypt($plainRequestComplete, $defaultIV, $userHash);
             $qCompleteReturn = requestTemplate($encryptedRequestHash, 'quest/complete', $cookie, $curl);
-
+            println("7");
             if (is_null($qCompleteReturn)) {
                 println("Empty Complete");
                 return null; //Server Error
@@ -456,13 +457,14 @@
             $qStartJsonResponse = json_decode(serverToUserDecrypt($qCompleteReturn, $defaultIV, $userHash), true);
 
             if ($qStartJsonResponse["error"] != 0){
+                println("8");
                 println(jsonPrettify($plainRequestComplete));
                 print $qStartJsonResponse["error"];
                 return null;
             }
             $questNr++;
             print(".");
-            println("4");
+            println("9");
         }
     }
 
