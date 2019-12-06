@@ -460,7 +460,7 @@
                 println("8");
                 println(jsonPrettify($plainRequestStart));
                 println(jsonPrettify($plainRequestComplete));
-                println(jsonPrettify($qStartJsonResponse));
+                println(jsonPrettify(json_encode($qStartJsonResponse)));
                 print $qStartJsonResponse["error"];
                 return null;
             }
