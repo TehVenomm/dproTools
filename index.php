@@ -371,10 +371,8 @@
                 return null;
             }
             
-            println(jsonPrettify(json_encode($qStartJsonResponse)));
-
             $partList = [];
-            foreach($qStartJsonResponse["result"]["enemy"]["reward"] as $part){
+            foreach($qStartJsonResponse["result"]["enemy"][0]["reward"] as $part){
                 $partList[] = $part["regionId"];
             }
 
