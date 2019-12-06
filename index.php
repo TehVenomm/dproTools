@@ -348,25 +348,25 @@
     }
 
     function ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl){
-        $questNr = 1;
-        while ($questNr <= $qNum){
+        $questNr = 0;
+        println("1");
+        while ($questNr < $qNum){
             $qToken = genRcToken();
 
             $plainRequestStart = '{"qid": '.$qId.',"qt": "'.$qToken.'","setNo": 27,"crystalCL": 0,"free": 1,"dId": 0,"d": "bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ef","actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 0,"weak": 0,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 0,"oraclePairSwords": 0}}';
 
             $encryptedRequestHash = userToServerEncrypt($plainRequestStart, $defaultIV, $userHash);
             $qStartReturn = requestTemplate($encryptedRequestHash, 'quest/start', $cookie, $curl);
-
+            println("2");
             if (is_null($qStartReturn)) {
-                println($qStartReturn." response");
-                return true; //Server Error
+                println("3");
+                println("Server Error");
+                return null; //Server Error
             }
 
             $qStartJsonResponse = json_decode(serverToUserDecrypt($qStartReturn, $defaultIV, $userHash), true);
 
-            if ($qStartJsonResponse["error"] == 0){
-            return true;
-            } else {
+            if ($qStartJsonResponse["error"] != 0){
                 print $qStartJsonResponse["error"];
                 return null;
             }
@@ -450,19 +450,18 @@
 
             if (is_null($qCompleteReturn)) {
                 println("Empty Complete");
-                return true; //Server Error
+                return null; //Server Error
             }
 
             $qStartJsonResponse = json_decode(serverToUserDecrypt($qCompleteReturn, $defaultIV, $userHash), true);
 
-            if ($qStartJsonResponse["error"] == 0){
-            return true;
-            } else {
+            if ($qStartJsonResponse["error"] != 0){
                 print $qStartJsonResponse["error"];
                 return null;
             }
             $questNr++;
             print(".");
+            println("4");
         }
     }
 
@@ -625,7 +624,10 @@
                 $qId = $quest["questId"];
                 $qNum = $quest["order"]["num"];
 
-                ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl);
+                if(is_null(ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl))){
+                    break;
+                }
+
                 println("\nNext victim... Target aquired.");
             }
 
