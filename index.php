@@ -354,9 +354,10 @@
             $qToken = genRcToken();
 
             $plainRequestStart = '{"qid":'.$qId.',"qt":"'.$qToken.'","setNo":26,"crystalCL":27115,"free":1,"dId":0,"d":"bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed","actioncount":{"revival":0,"guard":0,"counter":0,"lance":0,"combo":0,"chargesword":0,"chargebow":0,"usemagi":0,"weak":0,"weaponweak":0,"death":0,"heatTwoHandSword":0,"heatPairSwords":0,"revengeBurst":0,"justGuard":0,"shadowSealing":0,"jump":0,"soulOneHandSword":0,"soulTwoHandSword":0,"soulSpear":0,"soulPairSwords":0,"soulArrow":0,"burstOneHandSword":0,"thsFullBurst":0,"burstPairSwords":0,"burstSpear":0,"burstArrow":0,"concussion":0,"oracleOneHandSword":0,"oracleSpear":0,"oraclePairSwords":0}}';
-
-            $encryptedRequestHash1 = userToServerEncrypt($plainRequestStart, $defaultIV, $userHash);
-            $qStartReturn = requestTemplate($encryptedRequestHash1, 'quest/start', $cookie, $curl);
+            
+            $fuck1 = '0tsj76a3mhZIOZF12QsRLpimGqqN0ggyFncQ75fM8ThT1RK1yZh1uwzvJxeN49OVHTSyV+Adp1ebK3APHc11AKnoM67yj6cLtbr+o358TnbyFen7o7RUYIx+KqHvTKAqyg6pAqkYBnCrOo/gqUpW0PMMm9u9bCA15cTXTYIxy4EwsUGD8OZ8Aop6c5lnmiwr8+EZMyvNl5tGVCtOOS2wBcj6jU7/eH48ZWXaD6loKiHDaENP90KiKUVCxqumDmx32dV95CRIT0Zv6kSFGzsdw4OwY8FI3SVipV03+dcurmZbVkAuqJ0sAvL5d/l1iEtxGEc/XTdFOSX6/lYvgWxYeJBRFt0wrJs9iusURJXSS4sbGX86C4FZmtQlVqWop1ZfjiVkJK1EX9fFCh5HKOyHY9DQK6IeHuKG2CNSWXp+YrruN/7VQO5bWJ1dTOWut7c/HXHO3Aez0Vw6H7IH1ojIyJEsIngDyEmtjpJmKVNpxdldDiQsqBxSt8vd0Y+XQ0k8mnHDXsG3L/rifkI/xks+5PNwjOiUOGIzTRxYOjoqxxdeGbYzrm7s1aTTGVVPfDYsdb/r7ZPBHhh0R80xFYcLW2yaGNcSSleA9KKMP2EPnsI+hy30B9lcQkKb4F3mrAjxh2WJdrULZn42V5FUWffwupMSuxh/zR+dw0DQf2DOfhQmr72uogRj55C8r7ndjpNElPxUSi1YSkt96kUaizAOZ+WRMNgpsjRFQ9EIPq4+WPBdwTinBs73WC97IlxmC57HS120djauiYWnbY6+asrm7jGEuLomgPPch6183U+ZY43fkteEKpHSV4PBVBFGay8+h35lYq/tbAtNHpPq+xaJIq98WOdQPWOcSLKaRthKt/z1/7K4PLy0gxKH5/5TOUIkLgCbwc89IrRHi9EHmLRw365K3aPtsEdLDonnsueugHw=';
+            //$encryptedRequestHash1 = userToServerEncrypt($plainRequestStart, $defaultIV, $userHash);
+            $qStartReturn = requestTemplate($fuck1, 'quest/start', $cookie, $curl);
             println("2");
             if (is_null($qStartReturn)) {
                 println("3");
@@ -378,11 +379,11 @@
             }
             
             sleep(10);
-            
-            $plainRequestComplete = '{"qt": "'.$qToken.'","breakIds0": ['.implode(',', $partList).'],"breakIds1": [],"breakIds2": [],"breakIds3": [],"breakIds4": [],"memids": [],"mClear": [],"hpRate": 0,"givenDamageList": [],"fieldId": "47548172","logs": [],"actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 0,"weak": 0,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 0,"oraclePairSwords": 0},"deliveryBattleInfo": {"maxDamageSelf": 10000,"totalAttackCount": 50,"attackCount": 50,"totalSkillCountList": [],"mySkillCountList": [],"damageByWeaponList": [],"currentDamageByWeaponList": [],"playerActionInfoList": []},"enemyHp": 10000,"remainSec": 278.5302734375,"elapseSec": 21.4697265625,"dc": 0,"dbc": 0,"pdbc": 0,"rHp": 0,"rSec": 0,"wmwave": 0}';
 
-            $encryptedRequestHash2 = userToServerEncrypt($plainRequestComplete, $defaultIV, $userHash);
-            $qCompleteReturn = requestTemplate($encryptedRequestHash2, 'quest/complete', $cookie, $curl);
+            $plainRequestComplete = '{"qt": "'.$qToken.'","breakIds0": ['.implode(',', $partList).'],"breakIds1": [],"breakIds2": [],"breakIds3": [],"breakIds4": [],"memids": [],"mClear": [],"hpRate": 0,"givenDamageList": [],"fieldId": "47548172","logs": [],"actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 0,"weak": 0,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 0,"oraclePairSwords": 0},"deliveryBattleInfo": {"maxDamageSelf": 10000,"totalAttackCount": 50,"attackCount": 50,"totalSkillCountList": [],"mySkillCountList": [],"damageByWeaponList": [],"currentDamageByWeaponList": [],"playerActionInfoList": []},"enemyHp": 10000,"remainSec": 278.5302734375,"elapseSec": 21.4697265625,"dc": 0,"dbc": 0,"pdbc": 0,"rHp": 0,"rSec": 0,"wmwave": 0}';
+            $fuck2 = 'ROILFb4o98unI+OUBx/gG5sCZgbciGS6Lz8fSY7ZE/Aw2Xwlhwvtv8YG0cuGrfDdOY/do/lb+p1I8Ohgetupq/vLXcMSl1hnSif9e7uc2vCXcqjQgqc18rcInTsOme5VzHX1Voj97ccw9CJom27rpsBYCxpmUWIXt1EOCBlNnWxk6JD3lBwcEGNZ1DWDvmvGyzzUJj2E6veg+OXGLnWGKM03gWyAzxkHpWyy8JhwDJcqeiQHHxGwuzteKcfbVx/heM0O7EaUPweNtSlb7VFo9qQVGYM/LjWAzdqnFiUzNk9JqW01Ejs8/2jThiJRyEazkQaYuBBpnGSyZ28Nd5DUJzqNhhkuXXrq3EdZOcffKeamIGgvhUZCs5YfALnjigdHYNIbFiWlhVmgta+XevmNw9cCE1IXHSXrWEvfLVhQkxbb2vhNqMvu1vWTcFCoNeUai5FKva1rvWcvFz75TIinjT/BDp7oqfDFrN/WwPc7geIGu8aJZ7GZ36ik2AxAx6+XO2aM7E4ju0HT3kx8QVeshRmjRDqsYu2UcY0CsAizRdPTsWtjpC+FZ1dUf0FmxvDrsYKDyk+NUL/Wd0QDB5QC1YB3hQEtNk8uDNSk7E9uAGH3jntqF1FEr/ykheuproA1eyqS33mMC0X2EqcSzzHFSGQDtTcneG7Eck9FNNIzf74vUSdX6mLQcuQtnNczJ41wO/cIt8aCptn0UrYbnxm23p7BFTPZ8ctv6VkFzBywkQltrUSkgYfmw/+CxzUJmebVeln8JlZ4U5n62+0ob4o0pgX0nqVB7efvuUBmdp8whxl7ZBDKMn9hOUt8O/Krc7kUV5VjWBodA9KU0HWrAT/iGcqTrzaUz2UTgkASBY786Ers9AOaeXnYSrTjPwUTrqk5u9SB4iWZtKLjAYJ7gKhgVfwooFXG9y5XS6Pll6Yyzk85AegvKAe+ieOC1RXsxBSr3iYxJ8YujXpuQVCWFUgDnr6mApg8gFl6pYLSrY5xIU6MRuSnyI51n3+SfHIPTas6DWC5l3sLX4IVYIhzLOEm5d8X8VqHhZcB0Rs0suyLR+R7AVReAObqsKA0B3wKPxu/gBlTiMpNOD5BrffyH2mhb9NUaL0YJgjKHZgGTaN7fv9SELh6cuJM9Lb4EvleIcfuhJbl2K4im3yn5DssgRp0K1SH2Pry+Q+5rkbfQSRHUjlMeZ1a3FMVwlMimWj7vsOm9dpoAwm/O8WCc0ypGBAFGZCSrKPXlT1FMoYLE9zcPf38uwZ05oNv3WI+hO7hW5jU7gmEICIneiUmUmQTMJc6w+yUYndozH27qYaQ2TEZb9V06aMX+XwCe7cI/5Wm+R5ZvfCHpTvvCB4j6AmglIhAPS7S6ltmlBR6S4K8WJdRd/E=';
+            //$encryptedRequestHash2 = userToServerEncrypt($plainRequestComplete, $defaultIV, $userHash);
+            $qCompleteReturn = requestTemplate($fuck2, 'quest/complete', $cookie, $curl);
             println("7");
             if (is_null($qCompleteReturn)) {
                 println("Empty Complete");
@@ -393,11 +394,11 @@
 
             if ($qcompleteJsonResponse["error"] != 0){
                 println("8");
-                println($encryptedRequestHash1." hash1\n");
+                //println($encryptedRequestHash1." hash1\n");
                 println(jsonPrettify(json_encode($qStartJsonResponse))." request1\n");
-                println($encryptedRequestHash2." hash2\n");
+                //println($encryptedRequestHash2." hash2\n");
                 println(jsonPrettify(json_encode($qcompleteJsonResponse))." request2\n");
-                print $qStartJsonResponse["error"];
+                print $qcompleteJsonResponse["error"];
                 return null;
                 
             }
