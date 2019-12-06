@@ -458,7 +458,9 @@
 
             if ($qStartJsonResponse["error"] != 0){
                 println("8");
+                println(jsonPrettify($plainRequestStart));
                 println(jsonPrettify($plainRequestComplete));
+                println(jsonPrettify($qStartJsonResponse));
                 print $qStartJsonResponse["error"];
                 return null;
             }
