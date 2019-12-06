@@ -90,7 +90,7 @@
         $host = "http://appprd.dragonproject.gogame.net/ajax/$endpoint";
 
         if (!is_null($data)){
-            $body  .= "&data=".urlencode($data);
+            $body = "data=".urlencode($data).'&'.$body;
         }
 
         curl_setopt_array($curl, array(
