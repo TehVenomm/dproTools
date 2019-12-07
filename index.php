@@ -353,7 +353,11 @@
 
         $jsonResponse = json_decode(serverToUserDecrypt($dupeResult, $defaultIV, $userHash), true);
         //println($jsonResponse);
-        return $jsonResponse["result"]["list"]["presents"];
+        if (isset($jsonResponse["result"]["list"]["presents"])){
+            return $jsonResponse["result"]["list"]["presents"];
+        } else {
+            return null;
+        }
 
     }
 
@@ -369,44 +373,44 @@
             $plainRequestStart = array (
                 'qid' => $qId,
                 'qt' => $qToken,
-                'setNo' => 1,
+                'setNo' => 12,
                 'crystalCL' => 0,
                 'free' => 1,
                 'dId' => 0,
                 'd' => 'bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed',
                 'actioncount' => 
                 array (
-                'revival' => 0,
-                'guard' => 0,
-                'counter' => 0,
-                'lance' => 0,
-                'combo' => 0,
-                'chargesword' => 0,
-                'chargebow' => 0,
-                'usemagi' => 0,
-                'weak' => 0,
-                'weaponweak' => 0,
-                'death' => 0,
-                'heatTwoHandSword' => 0,
-                'heatPairSwords' => 0,
-                'revengeBurst' => 0,
-                'justGuard' => 0,
-                'shadowSealing' => 0,
-                'jump' => 0,
-                'soulOneHandSword' => 0,
-                'soulTwoHandSword' => 0,
-                'soulSpear' => 0,
-                'soulPairSwords' => 0,
-                'soulArrow' => 0,
-                'burstOneHandSword' => 0,
-                'thsFullBurst' => 0,
-                'burstPairSwords' => 0,
-                'burstSpear' => 0,
-                'burstArrow' => 0,
-                'concussion' => 0,
-                'oracleOneHandSword' => 0,
-                'oracleSpear' => 0,
-                'oraclePairSwords' => 0,
+                    'revival' => 0,
+                    'guard' => 0,
+                    'counter' => 0,
+                    'lance' => 0,
+                    'combo' => 0,
+                    'chargesword' => 0,
+                    'chargebow' => 0,
+                    'usemagi' => 0,
+                    'weak' => 0,
+                    'weaponweak' => 0,
+                    'death' => 0,
+                    'heatTwoHandSword' => 0,
+                    'heatPairSwords' => 0,
+                    'revengeBurst' => 0,
+                    'justGuard' => 0,
+                    'shadowSealing' => 0,
+                    'jump' => 0,
+                    'soulOneHandSword' => 0,
+                    'soulTwoHandSword' => 0,
+                    'soulSpear' => 0,
+                    'soulPairSwords' => 0,
+                    'soulArrow' => 0,
+                    'burstOneHandSword' => 0,
+                    'thsFullBurst' => 0,
+                    'burstPairSwords' => 0,
+                    'burstSpear' => 0,
+                    'burstArrow' => 0,
+                    'concussion' => 0,
+                    'oracleOneHandSword' => 0,
+                    'oracleSpear' => 0,
+                    'oraclePairSwords' => 0,
                 ),
             );
 
@@ -530,6 +534,26 @@
             print(".");
         }
         return true;
+    }
+
+    function pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie, $curl){
+        $plainRequest = '{"id":'.$bId.',"crystalCL":'.$gems.',"ticketCL":'.$tickets.',"productId":"","guaranteeCampaignType":0,"guaranteeCampaignId":0,"guaranteeRemainCount":0,"guaranteeUserCount":0,"useStepUpTicket":0,"seriesId":-1}';
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $pullResult = requestTemplate($encryptedRequestHash, 'gacha/gacha', $cookie, $curl);
+
+        if (is_null($pullResult)) {
+            println("SERVER ERROR");
+            return true; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($pullResult, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0){
+           return $jsonResponse["diff"];
+        } else {
+            println("Erro API: ".$jsonResponse["error"]);
+            return null;
+        }
     }
 
     /* -----============== Process Starters ==============----- */
@@ -665,7 +689,7 @@
                     $presents = dupePresents($presents, $defaultIV, $userHash, $cookie, $curl);
                 }
 
-                println('Page empty');
+                println("Page $i empty");
             } else {
                 println('ERROR: '.$jsonResponse["error"]);
             }
@@ -703,6 +727,44 @@
             println("\nHolocausted.");
         } else {
             println('ERROR: '.$jsonResponse["error"]);
+        }
+    }
+
+    function pullProcessStart($defaultIV, $userHash, $cookie, $bId, $tickets, $gems, $type = null){
+        $curl = curl_init();
+
+        if (is_null($type)){
+            for($i = $tickets; $i >= 50; $i-= 0){
+                $status = pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie, $curl);
+
+
+                if (is_null($status)){
+                    println('');
+                    println("ERRO TICKET ".$i." ABORTANDO");
+                    break;
+                }
+
+                $i = (int)$status[0]["item"][0]["update"][0]["num"];
+                println($status[0]["item"][0]["update"][0]["num"]." Tickets remaining. $i");
+            }
+
+            println('');
+            println("Out of tickets, remaining: ".$i);
+        } else {
+            for($i = $gems; $i >= 250; $i-= 250){
+                $status = pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie, $curl);
+
+                if (is_null($status)){
+                    println('');
+                    println("ERRO GEMS ".$i." ABORTANDO");
+                    break;
+                }
+
+                println($status[0]["status"][0]["crystal"][0]." Gems remaining.");
+            }
+
+            println('');
+            println("Out of gems, remaining: ".$i);
         }
     }
 
@@ -764,6 +826,10 @@
         case "massacre":
             massacreProcessStart($defaultIV, $userHash, $cookie);
         case "pull":
-            //pullProcessStart($argv[2], $argv[3], $argv[4], $defaultIV, $userHash, $cookie);
+            if (!isset($argv[5])){
+                pullProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3], $argv[4]);
+            } else {
+                pullProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3], $argv[4], $argv[5]);
+            }
         break;
     }
