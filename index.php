@@ -825,6 +825,7 @@
             pirateProcessStart($defaultIV, $userHash, $cookie);*/
         case "massacre":
             massacreProcessStart($defaultIV, $userHash, $cookie);
+        break;
         case "pull":
             if (!isset($argv[5])){
                 pullProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3], $argv[4]);
