@@ -3,6 +3,252 @@
     $userHash = '061dd115161aff9d956bba80768c9332';
     $cookie = 'e1f6a65336c7b896bcbfc0bc06b39099%3A1';
 
+    $equipArray = array("621050",
+    "621051",
+    "621052",
+    "626162",
+    "643932",
+    "648037",
+    "648532",
+    "662060",
+    "679645",
+    "682934",
+    "683121",
+    "683122",
+    "692446",
+    "695471",
+    "708621",
+    "728413",
+    "728414",
+    "728415",
+    "728416",
+    "728417",
+    "728418",
+    "728419",
+    "742588",
+    "759837",
+    "759839",
+    "759840",
+    "759841",
+    "788783",
+    "796581",
+    "797925",
+    "803116",
+    "832288",
+    "832771",
+    "832772",
+    "832773",
+    "844292",
+    "844293",
+    "844294",
+    "844295",
+    "844296",
+    "844297",
+    "844298",
+    "847617",
+    "847884",
+    "847906",
+    "847907",
+    "847908",
+    "850947",
+    "850948",
+    "850949",
+    "850950",
+    "850951",
+    "850952",
+    "850954",
+    "857891",
+    "857892",
+    "857893",
+    "857894",
+    "857896",
+    "857898",
+    "857900",
+    "858346",
+    "864512",
+    "866846",
+    "866847",
+    "866848",
+    "866849",
+    "866850",
+    "866851",
+    "866857",
+    "866858",
+    "866859",
+    "866860",
+    "866861",
+    "866862",
+    "866863",
+    "866864",
+    "869693",
+    "874073",
+    "874517",
+    "874518",
+    "874519",
+    "874521",
+    "874523",
+    "874525",
+    "874527",
+    "881743",
+    "881744",
+    "881745",
+    "881746",
+    "881747",
+    "881748",
+    "881749",
+    "882023",
+    "882024",
+    "882025",
+    "882026",
+    "882027",
+    "882181",
+    "885308",
+    "885309",
+    "885310",
+    "885311",
+    "886927",
+    "892838",
+    "892839",
+    "892840",
+    "892841",
+    "892842",
+    "892843",
+    "892849",
+    "892894",
+    "892895",
+    "892897",
+    "892900",
+    "892902",
+    "892908",
+    "892910",
+    "920172",
+    "920173",
+    "920174",
+    "920175",
+    "920176",
+    "920177",
+    "920178",
+    "920179",
+    "920180",
+    "920181",
+    "920182",
+    "920183",
+    "920184",
+    "920185",
+    "921717",
+    "921718",
+    "921719",
+    "921720",
+    "921721",
+    "925630",
+    "936971",
+    "936972",
+    "936973",
+    "936974",
+    "936979",
+    "936980",
+    "936981",
+    "936983",
+    "936984",
+    "936985",
+    "936986",
+    "936987",
+    "936988",
+    "936989",
+    "939028",
+    "940049",
+    "943626",
+    "943627",
+    "943628",
+    "943629",
+    "944037",
+    "944039",
+    "944521",
+    "944522",
+    "944523",
+    "944525",
+    "944527",
+    "944529",
+    "944531",
+    "950627",
+    "950629",
+    "950630",
+    "950632",
+    "950633",
+    "950634",
+    "950635",
+    "953287",
+    "953501",
+    "953941",
+    "953942",
+    "953943",
+    "953944",
+    "953945",
+    "953946",
+    "953947",
+    "965533",
+    "965534",
+    "965535",
+    "965536",
+    "965537",
+    "966490",
+    "966491",
+    "966492",
+    "966493",
+    "966494",
+    "966495",
+    "966496",
+    "966497",
+    "966503",
+    "966504",
+    "966505",
+    "966506",
+    "966507",
+    "966508",
+    "967654",
+    "973288",
+    "973289",
+    "973290",
+    "973291",
+    "973292",
+    "974284",
+    "974471",
+    "974472",
+    "974473",
+    "974474",
+    "974475",
+    "974476",
+    "974477",
+    "982037",
+    "982038",
+    "982039",
+    "982040",
+    "982041",
+    "982042",
+    "982043",
+    "982052",
+    "982053",
+    "982472",
+    "982473",
+    "982474",
+    "982475",
+    "982818",
+    "982819",
+    "1075449",
+    "1075451",
+    "1075452",
+    "1075453",
+    "1075454",
+    "1075455",
+    "1075456",
+    "1075457",
+    "1075458",
+    "1075459",
+    "1075460",
+    "1075461",
+    "1075462",
+    "1075463");
+
     /* -----============== Basic tools ==============----- */
     function println ($string_message) {
         if(!isset($_SERVER['SERVER_PROTOCOL'])){
@@ -79,7 +325,7 @@
     //cUrl template to be used as needed, since all relevant requests are the same anyway.
     //Differences are few but treated within.
     //Returns raw server response. Server errors return null and need to be addressed as they come.
-    function requestTemplate($data = null, $endpoint, $cookie, $curl = null, $rctoken = null){
+    function requestTemplate($data = null, $endpoint, $cookie, $curl = null, $rctoken = null, $needInfo = false){
         if (is_null($curl)){
             $curl = curl_init();
         }
@@ -134,7 +380,11 @@
             return null;
         }
 
-        return $response;
+        if ($needInfo == false){
+            return $response;
+        } else {
+            return array($response, $curl);
+        }
     }
 
     /* -----============== Basic routines ==============----- */
@@ -363,7 +613,9 @@
 
     function ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl){
         $questNr = 0;
+        $error = 0;
 
+        //while ($questNr < ($qNum-7)){
         while ($questNr < $qNum){
             $qToken = genRcToken();
 
@@ -422,7 +674,13 @@
 
             if (is_null($qStartReturn)) {
                 println("Server Error qstart");
-                return null; //Server Error
+                if ($error == 0){
+                    $questNr++;
+                    $error = 1;
+                    continue;
+                } else {
+                    return null; //Server Error
+                }
             }
 
             $qStartJsonResponse = json_decode(serverToUserDecrypt($qStartReturn, $defaultIV, $userHash), true);
@@ -430,7 +688,14 @@
             if ($qStartJsonResponse["error"] != 0){
                 println("API error qstart");
                 println($qStartJsonResponse["error"]);
-                return null;
+                println($encryptedRequestHash1);
+                if ($error == 0){
+                    $questNr++;
+                    $error = 1;
+                    continue;
+                } else {
+                    return null; //Server Error
+                }
             }
 
             $partList = [];
@@ -507,7 +772,41 @@
 
             $encryptedRequestHash2 = userToServerEncrypt(json_encode($plainRequestComplete), $defaultIV, $userHash);
 
-            sleep(15);
+            /* Claims stuff, uses the time spent to calculate the sleep needed so you can use the dead time for something... */
+            /*$time1 = time();
+
+            if ($questNr > ($qNum-7)){
+            } else {
+                for($j = 0; $j<5; $j++){
+                    $isComplete = guildQuestComplete($j, $defaultIV, $userHash, $cookie, $curl);
+
+                    if ($isComplete == true){
+                        $isStart = guildQuestStart($qId, $j, $defaultIV, $userHash, $cookie, $curl);
+                        if ($isStart == true){
+                            println("-");
+                            $questNr++;
+
+                            if ($questNr > ($qNum-7)){
+                                println("max behe");
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if($questNr > ($qNum-7)){
+                    break;
+                }
+            }
+
+            $time2 = time();
+            $timeLeft = 16-($time2 - $time1);*/
+
+            /* End of claim area... needs work i guess, can be made into a process? */
+
+            //if($timeLeft >= 0){
+                sleep(15);
+            //}
 
             $qCompleteReturn = requestTemplate($encryptedRequestHash2, 'quest/complete', $cookie, $curl);
 
@@ -518,8 +817,14 @@
             println("\nreturn hash 2 *".$qCompleteReturn."*");*/
 
             if (is_null($qCompleteReturn)) {
-                println("Server Error qcomplete");
-                return null; //Server Error
+                println("\nServer Error qcomplete");
+                if ($error == 0){
+                    $questNr++;
+                    $error = 1;
+                    continue;
+                } else {
+                    return null; //Server Error
+                }
             }
 
             $qcompleteJsonResponse = json_decode(serverToUserDecrypt($qCompleteReturn, $defaultIV, $userHash), true);
@@ -527,7 +832,13 @@
             if ($qcompleteJsonResponse["error"] != 0){
                 println("API error qcomplete");
                 println($qcompleteJsonResponse["error"]);
-                return null;
+                if ($error == 0){
+                    $questNr++;
+                    $error = 1;
+                    continue;
+                } else {
+                    return null; //Server Error
+                }
             }
 
             $questNr++;
@@ -556,6 +867,76 @@
         }
     }
 
+    function claimAll($defaultIV, $userHash, $cookie, $curl){
+        $claimResult = requestTemplate(null, 'guild-request/complete-all', $cookie, $curl);
+
+        if (is_null($claimResult)) {
+            println("SERVER ERROR");
+            return true; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($claimResult, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0){
+            return $jsonResponse;
+        } else {
+            if ($jsonResponse["error"] == 5052 || $jsonResponse["error"] == 5022){
+                return false;
+            } else {
+                println("\nError ".$jsonResponse["error"]." On claim all.");
+                return null;
+            }
+        }
+    }
+
+    function guildQuestStart($qid, $slotNr, $defaultIV, $userHash, $cookie, $curl){
+        $plainRequest = '{"slotNo":'.$slotNr.',"questId":'.$qid.',"num":1,"isQuestItem":1}';
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $claimResult = requestTemplate($encryptedRequestHash, 'guild-request/start', $cookie, $curl);
+
+        if (is_null($claimResult)) {
+            println("SERVER ERROR");
+            return null; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($claimResult, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0){
+            return true;
+        } else {
+            if ($jsonResponse["error"] == 5053){
+                return false;
+            } else {
+                println("\nError Starting ".$jsonResponse["error"]." On slot Nr. ".$slotNr);
+                return null;
+            }
+        }
+    }
+
+    function guildQuestComplete($slotNr, $defaultIV, $userHash, $cookie, $curl){
+        $plainRequest = '{"slotNo":'.$slotNr.'}';
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $claimResult = requestTemplate($encryptedRequestHash, 'guild-request/complete', $cookie, $curl);
+
+        if (is_null($claimResult)) {
+            println("SERVER ERROR");
+            return null; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($claimResult, $defaultIV, $userHash), true);
+        
+        if ($jsonResponse["error"] == 0 || $jsonResponse["error"] == 5004){
+            println("\ntrue ".$slotNr);
+            return true;
+        } else {
+            if ($jsonResponse["error"] == 5022 || $jsonResponse["error"] == 5052){
+                return false;
+            } else {
+                println("\nError Completing ".$jsonResponse["error"]." On slot Nr. ".$slotNr);
+                return null;
+            }
+        }
+    }
     /* -----============== Process Starters ==============----- */
     function rerollPerfectProcessStart($euid, $aid = null, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
@@ -689,7 +1070,7 @@
                     $presents = dupePresents($presents, $defaultIV, $userHash, $cookie, $curl);
                 }
 
-                println("Page $i empty");
+                println("\nPage $i empty");
             } else {
                 println('ERROR: '.$jsonResponse["error"]);
             }
@@ -716,6 +1097,10 @@
             foreach($questList as $quest){
                 $qId = $quest["questId"];
                 $qNum = $quest["order"]["num"];
+
+                if ($qNum <= 7){
+                    continue;
+                }
 
                 if(is_null(ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl))){
                     break;
@@ -831,6 +1216,13 @@
                 pullProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3], $argv[4]);
             } else {
                 pullProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3], $argv[4], $argv[5]);
+            }
+        break;
+        case "bigReroll":
+            foreach($equipArray as $equip){
+                println($equip);
+                file_put_contents('./rollList_'.date("j.n.Y").'.txt', $equip."\n", FILE_APPEND);
+                rerollPerfectProcessStart($equip, null,$defaultIV, $userHash, $cookie);
             }
         break;
     }
