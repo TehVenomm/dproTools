@@ -9,6 +9,7 @@
     $cookie = getenv('COOKIE');
     $GLOBALS['tidx'] = getenv('TIDX');
     $GLOBALS['host'] = getenv('HOST');
+    $GLOBALS['d'] = getenv('D');
     
     if ($defaultIV == false){
         $defaultIV = 'yCNBH$$rCNGvC+#f';
@@ -28,6 +29,10 @@
 
     if ($GLOBALS['host'] == false){
         $GLOBALS['host'] = 'http://appprd.dragonproject.gogame.net/ajax/';
+    }
+
+    if ($GLOBALS['d'] == false){
+        $GLOBALS['d'] = 'bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed';
     }
 
     $equipArray = array(
@@ -638,7 +643,7 @@
                 'crystalCL' => 0,
                 'free' => 1,
                 'dId' => 0,
-                'd' => 'bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed',
+                'd' => $GLOBALS['d'],
                 'actioncount' => 
                 array (
                     'revival' => 0,
