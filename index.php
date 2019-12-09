@@ -1,8 +1,20 @@
 <?php
-    $defaultIV = 'yCNBH$$rCNGvC+#f';
+
+    $defaultIV = getenv('IV');
+    $userHash = getenv('KEY');
+    $cookie = getenv('COOKIE');
     
-    $userHash = '061dd115161aff9d956bba80768c9332';
-    $cookie = 'e1f6a65336c7b896bcbfc0bc06b39099%3A1';
+    if ($defaultIV == false){
+        $defaultIV = 'yCNBH$$rCNGvC+#f';
+    } 
+
+    if ($userHash == false){
+        $userHash = '061dd115161aff9d956bba80768c9332';
+    } 
+
+    if ($cookie == false){
+        $cookie = 'e1f6a65336c7b896bcbfc0bc06b39099%3A1';
+    } 
 
     $equipArray = array(
     "728419",
