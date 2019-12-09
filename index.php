@@ -1,29 +1,10 @@
 <?php
     $defaultIV = 'yCNBH$$rCNGvC+#f';
+    
     $userHash = '061dd115161aff9d956bba80768c9332';
     $cookie = 'e1f6a65336c7b896bcbfc0bc06b39099%3A1';
 
-    $equipArray = array("621050",
-    "621051",
-    "621052",
-    "626162",
-    "643932",
-    "648037",
-    "648532",
-    "662060",
-    "679645",
-    "682934",
-    "683121",
-    "683122",
-    "692446",
-    "695471",
-    "708621",
-    "728413",
-    "728414",
-    "728415",
-    "728416",
-    "728417",
-    "728418",
+    $equipArray = array(
     "728419",
     "742588",
     "759837",
@@ -423,6 +404,8 @@
                 $ignored = false;
                 //Is Ticket
                 if ($entry["itemId"] == 1200000){
+                    $redeemed = true;
+                    $uniqIdArray[] = $entry["uniqId"]; //comment these once you have enough gold
                     continue;
                 }
                 //Is tablet
@@ -443,20 +426,20 @@
                 }
 
                 if (preg_match("/(Obtained\sin\sSummon)/", $entry["comment"]) && $entry["type"] == 6 ){
-                    continue;
-                }
-
-                if (preg_match("/(Gold)/", $entry["name"]) && $entry["type"] == 2){
                     $redeemed = true;
                     $uniqIdArray[] = $entry["uniqId"]; //comment these once you have enough gold
                     continue;
                 }
+
+                if (preg_match("/(Gold)/", $entry["name"]) && $entry["type"] == 2){
+                    continue;
+                }
                 //Is vault item
-                if (!$ignored /*&& preg_match("/(Obtained\sfrom\sDragon)/", $entry["comment"])*/)
-                {
+                //if (!$ignored /*&& preg_match("/(Obtained\sfrom\sDragon)/", $entry["comment"])*/)
+                /*{
                     $redeemed = true;
                     $uniqIdArray[] = $entry["uniqId"];
-                }
+                }*/
             }
 
             if ($redeemed) {
@@ -1078,40 +1061,42 @@
     }
 
     function massacreProcessStart($defaultIV, $userHash, $cookie){
-        $curl = curl_init();
+        while(true){
+            $curl = curl_init();
 
-        $encryptedRequestHash = userToServerEncrypt(null, $defaultIV, $userHash);
-        $response = requestTemplate($encryptedRequestHash, 'quest/list', $cookie, $curl);
+            $encryptedRequestHash = userToServerEncrypt(null, $defaultIV, $userHash);
+            $response = requestTemplate($encryptedRequestHash, 'quest/list', $cookie, $curl);
 
-        if (is_null($response)) {
-            return null; //Server Error
-        }
-
-        $jsonResponse = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
-
-        if ($jsonResponse["error"] == 0) {
-            $questList = $jsonResponse["result"]["order"];
-
-            println("Starting... First Victim:");
-            
-            foreach($questList as $quest){
-                $qId = $quest["questId"];
-                $qNum = $quest["order"]["num"];
-
-                if ($qNum <= 7){
-                    continue;
-                }
-
-                if(is_null(ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl))){
-                    break;
-                }
-
-                println("\nNext victim... Target aquired.");
+            if (is_null($response)) {
+                return null; //Server Error
             }
 
-            println("\nHolocausted.");
-        } else {
-            println('ERROR: '.$jsonResponse["error"]);
+            $jsonResponse = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
+
+            if ($jsonResponse["error"] == 0) {
+                $questList = $jsonResponse["result"]["order"];
+
+                println("Starting... First Victim:");
+                
+                foreach($questList as $quest){
+                    $qId = $quest["questId"];
+                    $qNum = $quest["order"]["num"];
+
+                    /*if ($qNum <= 7){
+                        continue;
+                    }*/
+
+                    if(is_null(ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl))){
+                        break;
+                    }
+
+                    println("\nNext victim... Target aquired.");
+                }
+
+                println("\nHolocausted.");
+            } else {
+                println('ERROR: '.$jsonResponse["error"]);
+            }
         }
     }
 
