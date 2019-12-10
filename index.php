@@ -63,13 +63,6 @@
     }
 
     $equipArray = array(
-        "1048728",
-        "1048729",
-        "1048730",
-        "1048731",
-        "1048732",
-        "1049478",
-        "1049482",
         "1049492",
         "1049501",
         "1049510",
@@ -790,13 +783,17 @@
 
         if ($jsonResponse["error"] == 0) {
             if (is_null($aid)){
-                //Main ability route
-                $aid = $jsonResponse["result"][0]["aid"];
-                $maxap = $jsonResponse["result"][0]["maxap"];
-                $isPerfect = false;
+                if (isset($jsonResponse["result"][0]["aid"])){
+                    //Main ability route
+                    $aid = $jsonResponse["result"][0]["aid"];
+                    $maxap = $jsonResponse["result"][0]["maxap"];
+                    $isPerfect = false;
 
-                while ($isPerfect == false){
-                    $isPerfect = rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl, $euid);
+                    while ($isPerfect == false){
+                        $isPerfect = rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl, $euid);
+                    }
+                } else {
+                    println("$euid - HAS NO REROLLABLE ABILITIES.");
                 }
             } else {
                 //Custom ability route
