@@ -1,8 +1,5 @@
 <?php
-
-    global $defaultIV;
-    global $userHash;
-    global $cookie;
+    $server = 2;
 
     $defaultIV = getenv('IV');
     $userHash = getenv('KEY');
@@ -10,256 +7,82 @@
     $GLOBALS['tidx'] = getenv('TIDX');
     $GLOBALS['host'] = getenv('HOST');
     $GLOBALS['d'] = getenv('D');
+
     
-    if ($defaultIV == false){
-        $defaultIV = 'yCNBH$$rCNGvC+#f';
-    } 
+    
+    if ($server == 1){
+        if ($defaultIV == false){
+            $defaultIV = 'yCNBH$$rCNGvC+#f';
+        } 
 
-    if ($userHash == false){
-        $userHash = '061dd115161aff9d956bba80768c9332';
-    } 
+        if ($userHash == false){
+            $userHash = '061dd115161aff9d956bba80768c9332';
+        } 
 
-    if ($cookie == false){
-        $cookie = 'e1f6a65336c7b896bcbfc0bc06b39099%3A1';
-    } 
+        if ($cookie == false){
+            $cookie = 'e1f6a65336c7b896bcbfc0bc06b39099%3A1';
+        } 
 
-    if ($GLOBALS['tidx'] == false){
-        $GLOBALS['tidx'] = '163';
-    } 
+        if ($GLOBALS['tidx'] == false){
+            $GLOBALS['tidx'] = '163';
+        } 
 
-    if ($GLOBALS['host'] == false){
-        $GLOBALS['host'] = 'http://appprd.dragonproject.gogame.net/ajax/';
+        if ($GLOBALS['host'] == false){
+            $GLOBALS['host'] = 'http://appprd.dragonproject.gogame.net/ajax/';
+        }
+
+        if ($GLOBALS['d'] == false){
+            $GLOBALS['d'] = 'bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed';
+        }
     }
 
-    if ($GLOBALS['d'] == false){
-        $GLOBALS['d'] = 'bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed';
+    if ($server == 2){
+        if ($defaultIV == false){
+            $defaultIV = 'yCNBH$$rCNGvC+#f';
+        } 
+
+        if ($userHash == false){
+            $userHash = '1833b33428bd3119bbfe7d1fef0d2114';
+        } 
+
+        if ($cookie == false){
+            $cookie = '6290dba6f45b2f7dfebb4fc5d9e5674a109fc6ea%3A1';
+        } 
+
+        if ($GLOBALS['tidx'] == false){
+            $GLOBALS['tidx'] = '18001';
+        } 
+
+        if ($GLOBALS['host'] == false){
+            $GLOBALS['host'] = 'http://appprd-01.dragonproject.gogame.net/ajax/';
+        }
+
+        if ($GLOBALS['d'] == false){
+            $GLOBALS['d'] = 'fb630a79aea07fba5bdff5a5ac5b56c55f070d5a5fdc011cc559d57c5b4267bd69bdb197a340de2f86f3408058dff066';
+        }
     }
 
     $equipArray = array(
-    "728419",
-    "742588",
-    "759837",
-    "759839",
-    "759840",
-    "759841",
-    "788783",
-    "796581",
-    "797925",
-    "803116",
-    "832288",
-    "832771",
-    "832772",
-    "832773",
-    "844292",
-    "844293",
-    "844294",
-    "844295",
-    "844296",
-    "844297",
-    "844298",
-    "847617",
-    "847884",
-    "847906",
-    "847907",
-    "847908",
-    "850947",
-    "850948",
-    "850949",
-    "850950",
-    "850951",
-    "850952",
-    "850954",
-    "857891",
-    "857892",
-    "857893",
-    "857894",
-    "857896",
-    "857898",
-    "857900",
-    "858346",
-    "864512",
-    "866846",
-    "866847",
-    "866848",
-    "866849",
-    "866850",
-    "866851",
-    "866857",
-    "866858",
-    "866859",
-    "866860",
-    "866861",
-    "866862",
-    "866863",
-    "866864",
-    "869693",
-    "874073",
-    "874517",
-    "874518",
-    "874519",
-    "874521",
-    "874523",
-    "874525",
-    "874527",
-    "881743",
-    "881744",
-    "881745",
-    "881746",
-    "881747",
-    "881748",
-    "881749",
-    "882023",
-    "882024",
-    "882025",
-    "882026",
-    "882027",
-    "882181",
-    "885308",
-    "885309",
-    "885310",
-    "885311",
-    "886927",
-    "892838",
-    "892839",
-    "892840",
-    "892841",
-    "892842",
-    "892843",
-    "892849",
-    "892894",
-    "892895",
-    "892897",
-    "892900",
-    "892902",
-    "892908",
-    "892910",
-    "920172",
-    "920173",
-    "920174",
-    "920175",
-    "920176",
-    "920177",
-    "920178",
-    "920179",
-    "920180",
-    "920181",
-    "920182",
-    "920183",
-    "920184",
-    "920185",
-    "921717",
-    "921718",
-    "921719",
-    "921720",
-    "921721",
-    "925630",
-    "936971",
-    "936972",
-    "936973",
-    "936974",
-    "936979",
-    "936980",
-    "936981",
-    "936983",
-    "936984",
-    "936985",
-    "936986",
-    "936987",
-    "936988",
-    "936989",
-    "939028",
-    "940049",
-    "943626",
-    "943627",
-    "943628",
-    "943629",
-    "944037",
-    "944039",
-    "944521",
-    "944522",
-    "944523",
-    "944525",
-    "944527",
-    "944529",
-    "944531",
-    "950627",
-    "950629",
-    "950630",
-    "950632",
-    "950633",
-    "950634",
-    "950635",
-    "953287",
-    "953501",
-    "953941",
-    "953942",
-    "953943",
-    "953944",
-    "953945",
-    "953946",
-    "953947",
-    "965533",
-    "965534",
-    "965535",
-    "965536",
-    "965537",
-    "966490",
-    "966491",
-    "966492",
-    "966493",
-    "966494",
-    "966495",
-    "966496",
-    "966497",
-    "966503",
-    "966504",
-    "966505",
-    "966506",
-    "966507",
-    "966508",
-    "967654",
-    "973288",
-    "973289",
-    "973290",
-    "973291",
-    "973292",
-    "974284",
-    "974471",
-    "974472",
-    "974473",
-    "974474",
-    "974475",
-    "974476",
-    "974477",
-    "982037",
-    "982038",
-    "982039",
-    "982040",
-    "982041",
-    "982042",
-    "982043",
-    "982052",
-    "982053",
-    "982472",
-    "982473",
-    "982474",
-    "982475",
-    "982818",
-    "982819",
-    "1075449",
-    "1075451",
-    "1075452",
-    "1075453",
-    "1075454",
-    "1075455",
-    "1075456",
-    "1075457",
-    "1075458",
-    "1075459",
-    "1075460",
-    "1075461",
-    "1075462",
-    "1075463");
+        "1048728",
+        "1048729",
+        "1048730",
+        "1048731",
+        "1048732",
+        "1049478",
+        "1049482",
+        "1049492",
+        "1049501",
+        "1049510",
+        "1049511",
+        "1049512",
+        "1049547",
+        "1049548",
+        "1049549",
+        "1049550",
+        "1049551",
+        "1049552",
+        "1049553",
+        "1049554");
 
     /* -----============== Basic tools ==============----- */
     function println ($string_message) {
@@ -542,7 +365,7 @@
         }
     }
 
-    function rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl){
+    function rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl, $euid){
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
         $rerollResult = requestTemplate($encryptedRequestHash, 'smith/changeability', $cookie, $curl);
 
@@ -572,7 +395,7 @@
                 print '/';
             }
 
-            print "\n";
+            print " -> $euid\n";
 
             return $isPerfect;
         } else {
@@ -973,7 +796,7 @@
                 $isPerfect = false;
 
                 while ($isPerfect == false){
-                    $isPerfect = rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl);
+                    $isPerfect = rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl, $euid);
                 }
             } else {
                 //Custom ability route
@@ -1024,7 +847,9 @@
             if (is_null($status)){
                 println('');
                 println("ERRO PAGINA ".$i." ABORTANDO");
-                break;
+                $i++;
+                continue;
+                //break;
             }
 
             print ".";
