@@ -651,11 +651,11 @@
 
     function dupePresents($presents, $defaultIV, $userHash, $cookie, $curl){
         foreach ($presents as $present){
-            if ($present["itemId"] == 1200000){
+            /*if ($present["itemId"] == 1200000){
                 print("-");
 
                 continue;
-            }
+            }*/
 
             if (preg_match("/(Obtained\sin\sSummon)/", $present["comment"]) && $present["type"] == 6 ){
                 print("-");
@@ -663,11 +663,11 @@
                 continue;
             }
 
-            if (preg_match("/(Gems)/", $present["name"]) && $present["type"] == 1 ){
+            /*if (preg_match("/(Gems)/", $present["name"]) && $present["type"] == 1 ){
                 print("-");
 
                 continue;
-            }
+            }*/
 
             if (preg_match("/(Potion)/", $present["name"]) || preg_match("/(Elixir)/", $present["name"])){
                 print("-");
