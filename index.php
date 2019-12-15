@@ -1095,10 +1095,11 @@
                         $isPerfect = rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl, $euid);
 
                         if ($isPerfect == true){
-                            file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Perfected ->".$euid." ; Sv -> ".$GLOBALS['server']."\n", FILE_APPEND);
+                            file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Perfected ->".$euid."<- Perfected ; Sv -> ".$GLOBALS['server']."\n", FILE_APPEND);
                         }
                     }
                 } else {
+                    file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Error ->".$euid." ; Sv -> ".$GLOBALS['server']."\n", FILE_APPEND);
                     println(jsonPrettify(json_encode($jsonResponse)));
                     println("$euid - HAS NO REROLLABLE ABILITIES.");
                 }
@@ -1423,11 +1424,21 @@
             }
         break;
         case "bigReroll":
+            $i = 0;
+            $offset = 0;
+
+            if (isset($argv[2])){
+                $offset = $argv[2];
+            }
+
             foreach($equipArray as $equip){
-                println($equip);
-                file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Started ->".$equip."\n", FILE_APPEND);
-                rerollPerfectProcessStart($equip, null,$defaultIV, $userHash, $cookie);
-                file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Finished ->".$equip."\n", FILE_APPEND);
+                if ($i >= $offset){
+                    println($equip);
+                    file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Started ->".$equip."\n", FILE_APPEND);
+                    rerollPerfectProcessStart($equip, 0,$defaultIV, $userHash, $cookie);
+                    file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Finished ->".$equip."\n", FILE_APPEND);
+                }
+                $i++;
             }
         break;
     }
