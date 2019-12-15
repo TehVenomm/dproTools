@@ -1,6 +1,5 @@
 <?php
-    $GLOBALS['server'] = 1;
-
+    $GLOBALS['server'] = getenv('SERVER');
     $defaultIV = getenv('IV');
     $userHash = getenv('KEY');
     $cookie = getenv('COOKIE');
@@ -8,7 +7,9 @@
     $GLOBALS['host'] = getenv('HOST');
     $GLOBALS['d'] = getenv('D');
 
-    
+    if($GLOBALS['server']  == false){
+        $GLOBALS['server'] = 1;
+    }
     
     if ($GLOBALS['server'] == 1){
         if ($defaultIV == false){
@@ -288,14 +289,7 @@
         }
 
         $equipArray = array(
-            "1049547",
-            "1049548",
-            "1049549",
-            "1049550",
-            "1049551",
-            "1049552",
-            "1049553",
-            "1049554");
+        );
     }
 
     
