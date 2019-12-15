@@ -1,5 +1,5 @@
 <?php
-    $server = 2;
+    $GLOBALS['server'] = 1;
 
     $defaultIV = getenv('IV');
     $userHash = getenv('KEY');
@@ -10,7 +10,7 @@
 
     
     
-    if ($server == 1){
+    if ($GLOBALS['server'] == 1){
         if ($defaultIV == false){
             $defaultIV = 'yCNBH$$rCNGvC+#f';
         } 
@@ -262,7 +262,7 @@
             "1075463");
     }
 
-    if ($server == 2){
+    if ($GLOBALS['server'] == 2){
         if ($defaultIV == false){
             $defaultIV = 'yCNBH$$rCNGvC+#f';
         } 
@@ -474,8 +474,8 @@
                 $ignored = false;
                 //Is Ticket
                 if ($entry["itemId"] == 1200000){
-                    $redeemed = true;
-                    $uniqIdArray[] = $entry["uniqId"]; //comment these once you have enough gold
+                    //$redeemed = true;
+                    //$uniqIdArray[] = $entry["uniqId"]; //comment these once you have enough gold
                     continue;
                 }
                 //Is tablet
@@ -502,6 +502,18 @@
                 }
 
                 if (preg_match("/(Gold)/", $entry["name"]) && $entry["type"] == 2){
+                    continue;
+                }
+
+                if (preg_match("/(Potion)/", $entry["name"])){
+                    $redeemed = true;
+                    $uniqIdArray[] = $entry["uniqId"]; //comment these once you have enough gold
+                    continue;
+                }
+
+                if (preg_match("/(Elixir)/", $entry["name"])){
+                    $redeemed = true;
+                    $uniqIdArray[] = $entry["uniqId"]; //comment these once you have enough gold
                     continue;
                 }
                 //Is vault item
@@ -636,7 +648,7 @@
            return true;
         } elseif ($jsonResponse["error"] == 15005) {
             println($jsonResponse["error"].' Nro '. $chugId.' nao existe.');
-            return true;
+            return null;
         } else {
             print $jsonResponse["error"];
             return null;
@@ -669,9 +681,9 @@
                 continue;
             }
 
-            /*if (preg_match("/(Lv1\sx\s1)/", $present["name"]) && $present["type"] == 5 ){
+            if (preg_match("/(Lv1\sx\s1)/", $present["name"]) && $present["type"] == 5 ){
                 continue;
-            }*/
+            }
 
             $presentId = $present["uniqId"];
 
@@ -695,13 +707,32 @@
 
     }
 
-    function ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl){
+    function ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl, $isShadow = false){
         $questNr = 0;
         $error = 0;
 
-        //while ($questNr < ($qNum-7)){
         while ($questNr < $qNum){
             $qToken = genRcToken();
+
+            if ($questNr < $qNum && $isShadow == false){
+                for($j = 0; $j<5; $j++){
+                    $isComplete = guildQuestComplete($j, $defaultIV, $userHash, $cookie, $curl);
+
+                    if ($isComplete == true && ($questNr < ($qNum-5))){
+                        if (guildQuestStart($qId, $j, $defaultIV, $userHash, $cookie, $curl) == true){
+                            print("-");
+                            $questNr++;
+                            if($questNr > $qNum){
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if($questNr > $qNum){
+                    break;
+                }
+            }
 
             /*println("Qid *".$qId."*");
             println("qtoken *".$qToken."*");*/
@@ -709,7 +740,7 @@
             $plainRequestStart = array (
                 'qid' => $qId,
                 'qt' => $qToken,
-                'setNo' => 1,
+                'setNo' => 8,
                 'crystalCL' => 0,
                 'free' => 1,
                 'dId' => 0,
@@ -773,7 +804,7 @@
                 println("API error qstart");
                 println($qStartJsonResponse["error"]);
                 println($encryptedRequestHash1);
-                if ($error == 0){
+                if ($error == 0 && $isShadow == false){
                     $questNr++;
                     $error = 1;
                     continue;
@@ -783,8 +814,12 @@
             }
 
             $partList = [];
-            foreach($qStartJsonResponse["result"]["enemy"][0]["reward"] as $part){
-                $partList[] = $part["regionId"];
+            if (isset($qStartJsonResponse["result"]["enemy"][0]["reward"])){
+                foreach($qStartJsonResponse["result"]["enemy"][0]["reward"] as $part){
+                    $partList[] = $part["regionId"];
+                }
+            } else {
+                $partList[] = 0;
             }
             
             $plainRequestComplete = array (
@@ -888,7 +923,7 @@
 
             /* End of claim area... needs work i guess, can be made into a process? */
 
-            //if($timeLeft >= 0){
+            //if($isShadow == true){
                 sleep(15);
             //}
 
@@ -902,7 +937,7 @@
 
             if (is_null($qCompleteReturn)) {
                 println("\nServer Error qcomplete");
-                if ($error == 0){
+                if ($error == 0 && $isShadow == false){
                     $questNr++;
                     $error = 1;
                     continue;
@@ -916,7 +951,7 @@
             if ($qcompleteJsonResponse["error"] != 0){
                 println("API error qcomplete");
                 println($qcompleteJsonResponse["error"]);
-                if ($error == 0){
+                if ($error == 0 && $isShadow == false){
                     $questNr++;
                     $error = 1;
                     continue;
@@ -931,10 +966,10 @@
         return true;
     }
 
-    function pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie, $curl){
+    function pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie){
         $plainRequest = '{"id":'.$bId.',"crystalCL":'.$gems.',"ticketCL":'.$tickets.',"productId":"","guaranteeCampaignType":0,"guaranteeCampaignId":0,"guaranteeRemainCount":0,"guaranteeUserCount":0,"useStepUpTicket":0,"seriesId":-1}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
-        $pullResult = requestTemplate($encryptedRequestHash, 'gacha/gacha', $cookie, $curl);
+        $pullResult = requestTemplate($encryptedRequestHash, 'gacha/gacha', $cookie);
 
         if (is_null($pullResult)) {
             println("SERVER ERROR");
@@ -947,6 +982,8 @@
            return $jsonResponse["diff"];
         } else {
             println("Erro API: ".$jsonResponse["error"]);
+
+            println($encryptedRequestHash);
             return null;
         }
     }
@@ -1010,7 +1047,6 @@
         $jsonResponse = json_decode(serverToUserDecrypt($claimResult, $defaultIV, $userHash), true);
         
         if ($jsonResponse["error"] == 0 || $jsonResponse["error"] == 5004){
-            println("\ntrue ".$slotNr);
             return true;
         } else {
             if ($jsonResponse["error"] == 5022 || $jsonResponse["error"] == 5052){
@@ -1021,8 +1057,26 @@
             }
         }
     }
+
+    function checkAlive($defaultIV, $userHash, $cookie){
+        $aliveResult = requestTemplate(null, 'status/alive', $cookie);
+
+        if (is_null($aliveResult)) {
+            println("SERVER ERROR");
+            return true; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($aliveResult, $defaultIV, $userHash), true);
+
+        if ($jsonResponse["error"] == 0){
+           return true;
+        } else {
+            println("Erro API status alive: ".$jsonResponse["error"]);
+            return null;
+        }
+    }
     /* -----============== Process Starters ==============----- */
-    function rerollPerfectProcessStart($euid, $aid = null, $defaultIV, $userHash, $cookie){
+    function rerollPerfectProcessStart($euid, $aNbr = 0, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
         $plainRequest = '{"euid":"'.$euid.'"}';
 
@@ -1036,26 +1090,27 @@
         $jsonResponse = json_decode(serverToUserDecrypt($response, $defaultIV, $userHash), true);
 
         if ($jsonResponse["error"] == 0) {
-            if (is_null($aid)){
-                if (isset($jsonResponse["result"][0]["aid"])){
+            //if (is_null($aid)){
+                if (isset($jsonResponse["result"][$aNbr]["aid"])){
                     //Main ability route
-                    $aid = $jsonResponse["result"][0]["aid"];
-                    $maxap = $jsonResponse["result"][0]["maxap"];
+                    $aid = $jsonResponse["result"][$aNbr]["aid"];
+                    $maxap = $jsonResponse["result"][$aNbr]["maxap"];
                     $isPerfect = false;
 
                     while ($isPerfect == false){
                         $isPerfect = rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl, $euid);
 
                         if ($isPerfect == true){
-                            file_put_contents('./rollList_'.date("j.n.Y").'.txt', "Perfected ->".$euid."\n", FILE_APPEND);
+                            file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Perfected ->".$euid." ; Sv -> ".$GLOBALS['server']."\n", FILE_APPEND);
                         }
                     }
                 } else {
+                    println(jsonPrettify(json_encode($jsonResponse)));
                     println("$euid - HAS NO REROLLABLE ABILITIES.");
                 }
-            } else {
+            //} else {
                 //Custom ability route
-            }
+            //}
         } else {
             println('ERROR: '.$jsonResponse["error"]);
         }
@@ -1122,11 +1177,32 @@
         println("Ultima página processada: ".$i);
     }
 
-    function chugProcessStart($defaultIV, $userHash, $cookie){
+    function chugProcessStart($defaultIV, $userHash, $cookie, $id = null){
         $curl = curl_init();
+        //1909124 old  sv hunter elixir
+        //3308121 new  sv hunter elixir
+        if ($id == 1){
+            $potionId = 1909124;
+            println('Old server elixir');
+        }
+
+        if ($id == 2){
+            $potionId = 3308121;
+            println('New server elixir');
+        }
+
+        if (is_null($id)){
+            $potionId = 1909124;
+            println('Default old elixir');
+        }
+
+        if (isset($id) && $id != 1 && $id != 2){
+            $potionId = $id;
+            println('Custom potion');
+        }
 
         for($i = 0; $i <= 7500; $i){
-            $status = chugPotion('337205', $defaultIV, $userHash, $cookie, $curl);
+            $status = chugPotion($potionId, $defaultIV, $userHash, $cookie, $curl);
 
             if (is_null($status)){
                 println('');
@@ -1143,8 +1219,9 @@
     }
 
 
-    function dupeProcessStart($defaultIV, $userHash, $cookie){
-        for($i = 0; $i<=1600; $i++){
+    function dupeProcessStart($defaultIV, $userHash, $cookie, $pgStart = 0, $pgEnd = 900){
+        $collectedAtLeastOnce = false;
+        for($i = $pgStart; $i <= $pgEnd; $i++){
             $curl = curl_init();
             $plainRequest = '{"page":"'.$i.'"}';
 
@@ -1162,11 +1239,20 @@
 
                 while (!empty($presents)){
                     $presents = dupePresents($presents, $defaultIV, $userHash, $cookie, $curl);
+
+                    if (!empty($presents)){
+                        $collectedAtLeastOnce = true;
+                    }
                 }
 
                 println("\nPage $i empty");
             } else {
                 println('ERROR: '.$jsonResponse["error"]);
+            }
+            
+            if ($i == $pgEnd && $collectedAtLeastOnce == true){
+                $i = 0;
+                $collectedAtLeastOnce = false;
             }
         }
     }
@@ -1193,7 +1279,7 @@
                     $qId = $quest["questId"];
                     $qNum = $quest["order"]["num"];
 
-                    /*if ($qNum <= 7){
+                    /*if ($qNum > 25){
                         continue;
                     }*/
 
@@ -1211,37 +1297,53 @@
         }
     }
 
+    function killProcessStart($defaultIV, $userHash, $cookie, $number, $mId){
+        $curl = curl_init();
+
+        println("Starting:");
+        if ($number == 0){
+            $qidArray = array(
+                
+            );
+            foreach ($qidArray as $quest){
+                println("Try: ".$quest);
+                ripNTear($quest, 5, $defaultIV, $userHash, $cookie, $curl, true);
+            }
+
+        } else {        
+            ripNTear($mId, $number, $defaultIV, $userHash, $cookie, $curl, true);
+        }
+
+        println("\nDone.");
+    }
+
     function pullProcessStart($defaultIV, $userHash, $cookie, $bId, $tickets, $gems, $type = null){
         $curl = curl_init();
 
         if (is_null($type)){
             for($i = $tickets; $i >= 50; $i-= 0){
-                $status = pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie, $curl);
-
+                $status = pullBanner($bId, $i, $gems, $defaultIV, $userHash, $cookie);
 
                 if (is_null($status)){
-                    println('');
-                    println("ERRO TICKET ".$i." ABORTANDO");
-                    break;
+                    println("Erro... t.".$i);
+                } else {
+                    $i = (int)$status[0]["item"][0]["update"][0]["num"];
+                    println("Tickets remaining. $i");
                 }
-
-                $i = (int)$status[0]["item"][0]["update"][0]["num"];
-                println($status[0]["item"][0]["update"][0]["num"]." Tickets remaining. $i");
             }
 
             println('');
             println("Out of tickets, remaining: ".$i);
         } else {
-            for($i = $gems; $i >= 250; $i-= 250){
-                $status = pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie, $curl);
+            for($i = $gems; $i >= 250; $i-= 0){
+                $status = pullBanner($bId, $tickets, $i, $defaultIV, $userHash, $cookie);
 
                 if (is_null($status)){
-                    println('');
-                    println("ERRO GEMS ".$i." ABORTANDO");
-                    break;
+                    println("Erro... t.".$i);
+                } else {
+                    $i -= 250;
+                    println("Gems remaining. $i");
                 }
-
-                println($status[0]["status"][0]["crystal"][0]." Gems remaining.");
             }
 
             println('');
@@ -1293,19 +1395,31 @@
             if (isset($argv[2]) && isset($argv[3])){
                 rerollPerfectProcessStart($argv[2], $argv[3], $defaultIV, $userHash, $cookie);
             } elseif (isset($argv[2])){
-                rerollPerfectProcessStart($argv[2], null,$defaultIV, $userHash, $cookie);
+                rerollPerfectProcessStart($argv[2], 0, $defaultIV, $userHash, $cookie);
             }
         break;
         case "chug":
-            chugProcessStart($defaultIV, $userHash, $cookie);
+            if (isset($argv[2])){
+                chugProcessStart($defaultIV, $userHash, $cookie, $argv[2]);
+            } else  {
+                chugProcessStart($defaultIV, $userHash, $cookie, null);
+            }
         break;
         case "dupe":
-            dupeProcessStart($defaultIV, $userHash, $cookie);
+            if (isset($argv[2]) && isset($argv[3])){
+                dupeProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3]);
+            } else {
+                dupeProcessStart($defaultIV, $userHash, $cookie);
+            }
         break;
         /*case "pirate":
             pirateProcessStart($defaultIV, $userHash, $cookie);*/
         case "massacre":
-            massacreProcessStart($defaultIV, $userHash, $cookie);
+            if (isset($argv[2]) && isset($argv[3])){
+                killProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3]);
+            } else  {
+                massacreProcessStart($defaultIV, $userHash, $cookie);
+            }
         break;
         case "pull":
             if (!isset($argv[5])){
@@ -1317,9 +1431,9 @@
         case "bigReroll":
             foreach($equipArray as $equip){
                 println($equip);
-                file_put_contents('./rollList_'.date("j.n.Y").'.txt', "Started ->".$equip."\n", FILE_APPEND);
+                file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Started ->".$equip."\n", FILE_APPEND);
                 rerollPerfectProcessStart($equip, null,$defaultIV, $userHash, $cookie);
-                file_put_contents('./rollList_'.date("j.n.Y").'.txt', "Finished ->".$equip."\n", FILE_APPEND);
+                file_put_contents('./rollList_'.$GLOBALS['server'].'.txt', "Finished ->".$equip."\n", FILE_APPEND);
             }
         break;
     }
