@@ -37,9 +37,6 @@
         }
 
         $equipArray = array(
-            "728419",
-            "742588",
-            "759837",
             "759839",
             "759840",
             "759841",
@@ -675,9 +672,9 @@
                 continue;
             }
 
-            if (preg_match("/(Lv1\sx\s1)/", $present["name"]) && $present["type"] == 5 ){
+            /*if (preg_match("/(Lv1\sx\s1)/", $present["name"]) && $present["type"] == 5 ){
                 continue;
-            }
+            }*/
 
             $presentId = $present["uniqId"];
 
