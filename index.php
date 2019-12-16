@@ -1238,9 +1238,15 @@
             }
         break;
         case "ree":
+            $i = 0;
+
+            if (isset($argv[2])){
+                $i = $argv[2];
+            }
+
             $curl = curl_init();
 
-            for($i = 0; $i <= 5000000; $i++){
+            for($i; $i <= 5000000; $i++){
                 println($i);
                 QuestComplete($i, $defaultIV, $userHash, $cookie, $curl);
             }
