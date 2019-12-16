@@ -861,22 +861,9 @@
     function QuestComplete($qNr, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"uId":"'.$qNr.'"}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
-        $claimResult = requestTemplate($encryptedRequestHash, 'delivery/complete', $cookie, $curl);
-
-        if (is_null($claimResult)) {
-            println("SERVER ERROR");
-            return null; //Server Error
-        }
-
-        $jsonResponse = json_decode(serverToUserDecrypt($claimResult, $defaultIV, $userHash), true);
+        requestTemplate($encryptedRequestHash, 'delivery/complete', $cookie, $curl);
         
-        if ($jsonResponse["error"] == 0 ){
-            println("Quest $qNr Yes");
-            return true;
-        } else {
-            println("$qNr");
-            return null;
-        }
+        return true;
     }
     /* -----============== Process Starters ==============----- */
     function rerollPerfectProcessStart($euid, $aNbr = 0, $defaultIV, $userHash, $cookie){
@@ -1252,6 +1239,7 @@
         break;
         case "ree":
             for($i = 0; $i <= 5000000; $i++){
+                println($i);
                 QuestComplete($i, $defaultIV, $userHash, $cookie, null);
             }
         break;
