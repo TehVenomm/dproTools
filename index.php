@@ -8,7 +8,7 @@
     $GLOBALS['d'] = getenv('D');
 
     if($GLOBALS['server']  == false){
-        $GLOBALS['server'] = 2;
+        $GLOBALS['server'] = 1;
     }
     
     if ($GLOBALS['server'] == 1){
@@ -459,6 +459,8 @@
             $presentId = $present["uniqId"];
 
             $plainRequest = '{"uids":["'.$presentId.',1", "'.$presentId.',2", "'.$presentId.',3", "'.$presentId.',4", "'.$presentId.',5", "'.$presentId.',6", "'.$presentId.',7", "'.$presentId.',8", "'.$presentId.',9", "'.$presentId.',10"],"page":0}';
+            println($plainRequest);
+            
             $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
             $dupeResult = requestTemplate($encryptedRequestHash, 'present/receive', $cookie, $curl);
 
@@ -853,6 +855,29 @@
       
         return true;
     }
+
+
+
+    function QuestComplete($qNr, $defaultIV, $userHash, $cookie, $curl){
+        $plainRequest = '{"uId":"'.$qNr.'"}';
+        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
+        $claimResult = requestTemplate($encryptedRequestHash, 'delivery/complete', $cookie, $curl);
+
+        if (is_null($claimResult)) {
+            println("SERVER ERROR");
+            return null; //Server Error
+        }
+
+        $jsonResponse = json_decode(serverToUserDecrypt($claimResult, $defaultIV, $userHash), true);
+        
+        if ($jsonResponse["error"] == 0 ){
+            println("Quest $qNr Yes");
+            return true;
+        } else {
+            println("$qNr");
+            return null;
+        }
+    }
     /* -----============== Process Starters ==============----- */
     function rerollPerfectProcessStart($euid, $aNbr = 0, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
@@ -1226,8 +1251,8 @@
             }
         break;
         case "ree":
-            for($i = 0; $i <= 41; $i++){
-                    craft($cookie, null);
+            for($i = 0; $i <= 5000000; $i++){
+                QuestComplete($i, $defaultIV, $userHash, $cookie, null);
             }
         break;
     }
