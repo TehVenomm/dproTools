@@ -863,7 +863,7 @@
         $body = "data=".urlencode(aes256CBCEncrypt('{"uId":"'.$qNr.'"}', $userHash, $defaultIV))."&app=rob&rcToken=$rcToken1";
 
         curl_setopt_array($curl, array(
-        CURLOPT_URL => '54.68.177.21/ajax/delivery/complete',
+        CURLOPT_URL => 'http://appprd-01.dragonproject.gogame.net/ajax/delivery/complete',
         CURLOPT_RETURNTRANSFER => true,
         CURLOPT_ENCODING => "",
         CURLOPT_MAXREDIRS => 10,
@@ -1268,7 +1268,8 @@
                 $i++;
             }
         break;
-        case "ree":
+        case "questSpam":
+            $time1 = microtime(true);
             $i = 0;
 
             if (isset($argv[2])){
@@ -1281,5 +1282,65 @@
                 println($i);
                 QuestComplete($i, $defaultIV, $userHash, $curl);
             }
+        break;
+        case "ree":
+            $max=5000000;
+
+            $mh = curl_multi_init();
+            for($j = $argv[2]; $j <= $max; $j+=10){
+                for($i = $j; $i <= $j+10; $i++){
+                    $ch[$i] = curl_init();
+
+                    $rcToken1 = genRcToken();
+                    $body = "data=".urlencode(aes256CBCEncrypt('{"uId":"'.$i.'"}', $userHash, $defaultIV))."&app=rob&rcToken=$rcToken1";
+
+                    curl_setopt_array($ch[$i], array(
+                    CURLOPT_URL => 'http://appprd-01.dragonproject.gogame.net/ajax/delivery/complete',
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_ENCODING => "",
+                    CURLOPT_MAXREDIRS => 10,
+                    CURLOPT_TIMEOUT => 30,
+                    //CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                    CURLOPT_CUSTOMREQUEST => "POST",
+                    CURLOPT_POSTFIELDS => $body,
+                    CURLOPT_IPRESOLVE,
+                    CURL_IPRESOLVE_V4,
+                    CURLOPT_HTTPHEADER => array(
+                            "Cookie: robpt=6290dba6f45b2f7dfebb4fc5d9e5674a109fc6ea%3A1",
+                            "User-Agent: Dalvik/2.1.0 (Linux; U; Android 9; SM-N9600 Build/PPR1.180610.011)",
+                            "X-Unity-Version: 2018.4.3f1",
+                            "aidx: 106005",
+                            "amv: 1",
+                            "apv: 1.8.1",
+                            "cdv: -1",
+                            "dm: samsung SM-N9600",
+                            "tidx: 18001",
+                            "tmv: 1",
+                            "Cache-Control: no-cache",
+                            "Content-Type: application/x-www-form-urlencoded",
+                            "Accept-Encoding: gzip, deflate",
+                            "Expect: ",
+                            "Connection: keep-alive"
+                        ),
+                    ));
+
+                    curl_multi_add_handle($mh,$ch[$i]);
+                }
+
+                // Executando consulta
+                do {
+                    curl_multi_exec($mh, $running);
+                    curl_multi_select($mh);
+                } while ($running > 0);
+
+                // Obtendo dados de todas as consultas e retirando da fila
+                foreach(array_keys($ch) as $key){
+                    println($key);                    
+                    curl_multi_remove_handle($mh, $ch[$key]);
+                }
+            }
+
+            // Finalizando
+            curl_multi_close($mh);
         break;
     }
