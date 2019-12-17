@@ -858,10 +858,39 @@
 
 
 
-    function QuestComplete($qNr, $defaultIV, $userHash, $cookie, $curl){
-        $plainRequest = '{"uId":"'.$qNr.'"}';
-        $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
-        requestTemplate($encryptedRequestHash, 'delivery/complete', $cookie, $curl);
+    function QuestComplete($qNr, $defaultIV, $userHash, $curl){
+        $rcToken1 = genRcToken();
+        $body = "data=".urlencode(aes256CBCEncrypt('{"uId":"'.$qNr.'"}', $userHash, $defaultIV))."&app=rob&rcToken=$rcToken1";
+
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'http://appprd-01.dragonproject.gogame.net/ajax/delivery/complete',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => "",
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 30,
+        //CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => "POST",
+        CURLOPT_POSTFIELDS => $body,
+        CURLOPT_HTTPHEADER => array(
+                "Cookie: robpt=6290dba6f45b2f7dfebb4fc5d9e5674a109fc6ea%3A1",
+                "User-Agent: Dalvik/2.1.0 (Linux; U; Android 9; SM-N9600 Build/PPR1.180610.011)",
+                "X-Unity-Version: 2018.4.3f1",
+                "aidx: 106005",
+                "amv: 1",
+                "apv: 1.8.1",
+                "cdv: -1",
+                "dm: samsung SM-N9600",
+                "tidx: 18001",
+                "tmv: 1",
+                "Cache-Control: no-cache",
+                "Content-Type: application/x-www-form-urlencoded",
+                "Accept-Encoding: gzip, deflate",
+                "Expect: ",
+                "Connection: keep-alive"
+            ),
+        ));
+
+        curl_exec($curl);
         
         return true;
     }
@@ -1248,7 +1277,7 @@
 
             for($i; $i <= 5000000; $i++){
                 println($i);
-                QuestComplete($i, $defaultIV, $userHash, $cookie, $curl);
+                QuestComplete($i, $defaultIV, $userHash, $curl);
             }
         break;
     }
