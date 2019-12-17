@@ -1335,9 +1335,7 @@
 
                 // Obtendo dados de todas as consultas e retirando da fila
                 foreach(array_keys($ch) as $key){
-                    println($key);
-                    println(curl_multi_getcontent($ch[$key]));
-                    
+                    println($key);                    
                     curl_multi_remove_handle($mh, $ch[$key]);
                 }
             }
