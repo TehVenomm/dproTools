@@ -1285,10 +1285,10 @@
         break;
         case "ree":
             $max=5000000;
-
+            $step = 5;
             $mh = curl_multi_init();
-            for($j = $argv[2]; $j <= $max; $j+=10){
-                for($i = $j; $i <= $j+10; $i++){
+            for($j = $argv[2]; $j <= $max; $j+=$step){
+                for($i = $j; $i <= $j+$step; $i++){
                     $ch[$i] = curl_init();
 
                     $rcToken1 = genRcToken();
@@ -1335,7 +1335,9 @@
 
                 // Obtendo dados de todas as consultas e retirando da fila
                 foreach(array_keys($ch) as $key){
-                    println($key);                    
+                    println($key);
+                    println(curl_multi_getcontent($ch[$key]));
+                    
                     curl_multi_remove_handle($mh, $ch[$key]);
                 }
             }
