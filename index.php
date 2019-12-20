@@ -911,9 +911,9 @@
         $token = genRcToken();
         $plainRequest = '{"aid": 23006,"qid": 910000000,"qt": "'.$token.'","setNo": 0}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
-        $claimResult = requestTemplate($encryptedRequestHash, 'arena/start', $cookie, $curl);
+        /*$claimResult = */requestTemplate($encryptedRequestHash, 'arena/start', $cookie, $curl);
 
-        if (is_null($claimResult)) {
+        /*if (is_null($claimResult)) {
             println("SERVER ERROR START");
             return null; //Server Error
         }
@@ -923,15 +923,15 @@
         if ($jsonResponse["error"] != 0){
             println("\nError start ".$jsonResponse["error"]);
             return null;
-        }
+        }*/
 
         print("-");
 
         $plainRequest = '{"wave": 1,"qt": "'.$token.'","remainMilliSec": 707591,"elapseMilliSec": 12408,"breakIds": [0,3,6,7,8],"enemyHp": 1971599,"logs": [{"leaveCnt": 0,"userId": 1831197,"name": "â.¤Ayanamié.¬â.¢","baseId": 0,"objId": 99999,"isNpc": false,"hostUserId": 1831197,"startRemaindTime": 717.808288574219,"atkInfos": [{"name": "PLC02_attack_36_1","count": 4,"damage": 235812,"skillId": 0},{"name": "PLC02_attack_36_2","count": 5,"damage": 345871,"skillId": 0},{"name": "PLC02_attack_37_1","count": 4,"damage": 156354,"skillId": 0},{"name": "PLC02_attack_37_2","count": 4,"damage": 156354,"skillId": 0},{"name": "PLC02_attack_37_3","count": 4,"damage": 156354,"skillId": 0},{"name": "PLC02_attack_37_4","count": 4,"damage": 156354,"skillId": 0},{"name": "PLC02_attack_38","count": 4,"damage": 581848,"skillId": 0},{"name": "PLC02_attack_35","count": 4,"damage": 234536,"skillId": 0}]}],"actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 0,"weak": 0,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 1,"oraclePairSwords": 0},"deliveryBattleInfo": {"maxDamageSelf": 208622,"totalAttackCount": 37,"attackCount": 37,"totalSkillCountList": [{"skillId": 203700000,"totalCount": 1}],"mySkillCountList": [{"skillId": 203700000,"totalCount": 1}],"damageByWeaponList": [{"equipmentType": 2,"spAttackType": 4,"damage": 2225859},{"equipmentType": 2,"spAttackType": 4,"damage": 0},{"equipmentType": 2,"spAttackType": 4,"damage": 0}],"currentDamageByWeaponList": [{"equipmentType": 2,"spAttackType": 4,"damage": 2225859},{"equipmentType": 2,"spAttackType": 4,"damage": 0},{"equipmentType": 2,"spAttackType": 4,"damage": 0}],"playerActionInfoList": [{"actionType": 28,"totalDamage": 0,"totalCount": 1}]}}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
-        $claimResult = requestTemplate($encryptedRequestHash, 'arena/progress', $cookie, $curl);
+        /*$claimResult = */requestTemplate($encryptedRequestHash, 'arena/progress', $cookie, $curl);
 
-        if (is_null($claimResult)) {
+        /*if (is_null($claimResult)) {
             println("SERVER ERROR PROGRESS 1");
             return null; //Server Error
         }
@@ -941,15 +941,15 @@
         if ($jsonResponse["error"] != 0){
             println("\nError progress 1".$jsonResponse["error"]);
             return null;
-        }
+        }*/
 
         print("-");
         
         $plainRequest = '{"wave": 2,"qt": "'.$token.'","remainMilliSec": 725841,"elapseMilliSec": 31749,"breakIds": [0,1,6],"enemyHp": 1971599,"logs": [{"leaveCnt": 0,"userId": 1831197,"name": "â.¤Ayanamié.¬â.¢","baseId": 0,"objId": 99999,"isNpc": false,"hostUserId": 1831197,"startRemaindTime": 717.808288574219,"atkInfos": [{"name": "PLC02_attack_36_1","count": 16,"damage": 486622,"skillId": 0},{"name": "PLC02_attack_36_2","count": 16,"damage": 616685,"skillId": 0},{"name": "PLC02_attack_37_1","count": 15,"damage": 311165,"skillId": 0},{"name": "PLC02_attack_37_2","count": 15,"damage": 304973,"skillId": 0},{"name": "PLC02_attack_37_3","count": 14,"damage": 283902,"skillId": 0},{"name": "PLC02_attack_37_4","count": 13,"damage": 298779,"skillId": 0},{"name": "PLC02_attack_38","count": 12,"damage": 1170343,"skillId": 0},{"name": "PLC02_attack_35","count": 17,"damage": 522523,"skillId": 0},{"name": "PLC02_attack_40_2_1","count": 1,"damage": 10085,"skillId": 0}]},{"leaveCnt": 0,"userId": 1831197,"name": "Beguiling Ayame","baseId": 900018402,"objId": 500001,"isNpc": false,"hostUserId": 1831197,"startRemaindTime": 753.407958984375,"atkInfos": [{"name": "atk7","count": 1,"damage": 0,"skillId": 0},{"name": "atk9","count": 1,"damage": 0,"skillId": 0},{"name": "atk_back","count": 4,"damage": 196,"skillId": 0},{"name": "atk5","count": 1,"damage": 492,"skillId": 0},{"name": "atk6","count": 1,"damage": 73,"skillId": 0}]}],"actioncount": {"revival": 0,"guard": 0,"counter": 0,"lance": 0,"combo": 0,"chargesword": 0,"chargebow": 0,"usemagi": 1,"weak": 1,"weaponweak": 0,"death": 0,"heatTwoHandSword": 0,"heatPairSwords": 0,"revengeBurst": 0,"justGuard": 0,"shadowSealing": 0,"jump": 0,"soulOneHandSword": 0,"soulTwoHandSword": 0,"soulSpear": 0,"soulPairSwords": 0,"soulArrow": 0,"burstOneHandSword": 0,"thsFullBurst": 0,"burstPairSwords": 0,"burstSpear": 0,"burstArrow": 0,"concussion": 0,"oracleOneHandSword": 0,"oracleSpear": 0,"oraclePairSwords": 0},"deliveryBattleInfo": {"maxDamageSelf": 154852,"totalAttackCount": 93,"attackCount": 93,"totalSkillCountList": [{"skillId": 203700000,"totalCount": 1}],"mySkillCountList": [{"skillId": 203700000,"totalCount": 1}],"damageByWeaponList": [{"equipmentType": 2,"spAttackType": 4,"damage": 1984088},{"equipmentType": 2,"spAttackType": 4,"damage": 0},{"equipmentType": 2,"spAttackType": 4,"damage": 0}],"currentDamageByWeaponList": [{"equipmentType": 2,"spAttackType": 4,"damage": 1984088},{"equipmentType": 2,"spAttackType": 4,"damage": 0},{"equipmentType": 2,"spAttackType": 4,"damage": 0}],"playerActionInfoList": [{"actionType": 1,"totalDamage": 27877,"totalCount": 1}]}}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
-        $claimResult = requestTemplate($encryptedRequestHash, 'arena/progress', $cookie, $curl);
+        /*$claimResult = */requestTemplate($encryptedRequestHash, 'arena/progress', $cookie, $curl);
 
-        if (is_null($claimResult)) {
+        /*if (is_null($claimResult)) {
             println("SERVER ERROR PROGRESS 2");
             return null; //Server Error
         }
@@ -959,15 +959,15 @@
         if ($jsonResponse["error"] != 0){
             println("\nError progress 2".$jsonResponse["error"]);
             return null;
-        }
+        }*/
 
         print("-");
         
         $plainRequest = '{"wave":3,"qt":"'.$token.'","remainMilliSec":696422,"elapseMilliSec":59419,"breakIds":[0,2,7],"enemyHp":1478699,"logs":[{"leaveCnt":0,"userId":1831197,"name":"â.¤Ayanamié.¬â.¢","baseId":0,"objId":99999,"isNpc":false,"hostUserId":1831197,"startRemaindTime":717.808288574219,"atkInfos":[{"name":"PLC02_attack_36_1","count":23,"damage":702460,"skillId":0},{"name":"PLC02_attack_36_2","count":25,"damage":940271,"skillId":0},{"name":"PLC02_attack_37_1","count":25,"damage":518926,"skillId":0},{"name":"PLC02_attack_37_2","count":22,"damage":459143,"skillId":0},{"name":"PLC02_attack_37_3","count":20,"damage":407238,"skillId":0},{"name":"PLC02_attack_37_4","count":19,"damage":422115,"skillId":0},{"name":"PLC02_attack_38","count":18,"damage":1787281,"skillId":0},{"name":"PLC02_attack_35","count":24,"damage":738361,"skillId":0},{"name":"PLC02_attack_40_2_1","count":7,"damage":110699,"skillId":0},{"name":"sk_light_mulchsword_1st_hit","count":7,"damage":934475,"skillId":100200501}]},{"leaveCnt":0,"userId":1831197,"name":"Beguiling Ayame","baseId":900018402,"objId":500001,"isNpc":false,"hostUserId":1831197,"startRemaindTime":753.407958984375,"atkInfos":[{"name":"atk7","count":1,"damage":0,"skillId":0},{"name":"atk9","count":1,"damage":0,"skillId":0},{"name":"atk_back","count":4,"damage":196,"skillId":0},{"name":"atk5","count":1,"damage":492,"skillId":0},{"name":"atk6","count":1,"damage":73,"skillId":0},{"name":"atk01_S","count":1,"damage":0,"skillId":0},{"name":"atk35","count":1,"damage":0,"skillId":0},{"name":"atk02_2","count":1,"damage":96,"skillId":0},{"name":"atk03_S","count":1,"damage":1379,"skillId":0},{"name":"atk06_S","count":1,"damage":965,"skillId":0},{"name":"atk09_2","count":4,"damage":492,"skillId":0},{"name":"atk08","count":1,"damage":0,"skillId":0},{"name":"atk09_3","count":2,"damage":98,"skillId":0},{"name":"atk09","count":1,"damage":0,"skillId":0}]}],"actioncount":{"revival":0,"guard":0,"counter":0,"lance":0,"combo":0,"chargesword":0,"chargebow":0,"usemagi":6,"weak":2,"weaponweak":0,"death":0,"heatTwoHandSword":0,"heatPairSwords":0,"revengeBurst":0,"justGuard":0,"shadowSealing":0,"jump":0,"soulOneHandSword":0,"soulTwoHandSword":0,"soulSpear":0,"soulPairSwords":0,"soulArrow":0,"burstOneHandSword":0,"thsFullBurst":0,"burstPairSwords":0,"burstSpear":0,"burstArrow":0,"concussion":0,"oracleOneHandSword":0,"oracleSpear":0,"oraclePairSwords":0},"deliveryBattleInfo":{"maxDamageSelf":219881,"totalAttackCount":76,"attackCount":76,"totalSkillCountList":[{"skillId":203700000,"totalCount":2},{"skillId":306620000,"totalCount":3},{"skillId":100200501,"totalCount":1}],"mySkillCountList":[{"skillId":203700000,"totalCount":2},{"skillId":306620000,"totalCount":3},{"skillId":100200501,"totalCount":1}],"damageByWeaponList":[{"equipmentType":2,"spAttackType":4,"damage":2107546},{"equipmentType":2,"spAttackType":4,"damage":0},{"equipmentType":2,"spAttackType":4,"damage":0}],"currentDamageByWeaponList":[{"equipmentType":2,"spAttackType":4,"damage":2107546},{"equipmentType":2,"spAttackType":4,"damage":0},{"equipmentType":2,"spAttackType":4,"damage":0}],"playerActionInfoList":[{"actionType":1,"totalDamage":55827,"totalCount":2}]}}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
-        $claimResult = requestTemplate($encryptedRequestHash, 'arena/progress', $cookie, $curl);
+        /*$claimResult = */requestTemplate($encryptedRequestHash, 'arena/progress', $cookie, $curl);
 
-        if (is_null($claimResult)) {
+        /*if (is_null($claimResult)) {
             println("SERVER ERROR PROGRESS 3");
             return null; //Server Error
         }
@@ -977,7 +977,7 @@
         if ($jsonResponse["error"] != 0){
             println("\nError progress 3".$jsonResponse["error"]);
             return null;
-        }
+        }*/
 
         print(".");
         /*sleep(5);
