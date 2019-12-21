@@ -263,8 +263,9 @@
                 }
 
                 if (preg_match("/(Gems)/", $entry["name"]) && $entry["type"] == 1 ){
-                    $redeemed = true;
-                    $uniqIdArray[] = $entry["uniqId"]; 
+                    /*$redeemed = true;
+                    $uniqIdArray[] = $entry["uniqId"]; */
+                    $ignored = true;
                     continue;
                 }
 
@@ -298,11 +299,11 @@
                     continue;
                 }
                 //Is vault item
-                //if (!$ignored /*&& preg_match("/(Obtained\sfrom\sDragon)/", $entry["comment"])*/)
-                /*{
+                if (!$ignored /*&& preg_match("/(Obtained\sfrom\sDragon)/", $entry["comment"])*/)
+                {
                     $redeemed = true;
                     $uniqIdArray[] = $entry["uniqId"];
-                }*/
+                }
             }
 
             if ($redeemed) {
@@ -494,10 +495,10 @@
         $questNr = 0;
         $error = 0;
 
-        while ($questNr < ($qNum-5)){
+        while ($questNr < ($qNum)){
             $qToken = genRcToken();
 
-            if ($questNr < $qNum && $isShadow == false){
+            if ($questNr < ($qNum-5) && $isShadow == false){
                 for($j = 0; $j<5; $j++){
                     $isComplete = guildQuestComplete($j, $defaultIV, $userHash, $cookie, $curl);
 
@@ -1249,15 +1250,19 @@
 
         println("Starting:");
         if ($number == 0){
-            $qidArray = array(
+            /*$qidArray = array(
                 
             );
             foreach ($qidArray as $quest){
                 println("Try: ".$quest);
                 ripNTear($quest, 5, $defaultIV, $userHash, $cookie, $curl, true);
+            }*/
+
+            while(true){      
+                ripNTear($mId, 100, $defaultIV, $userHash, $cookie, $curl, true);
             }
 
-        } else {        
+        } else {  
             ripNTear($mId, $number, $defaultIV, $userHash, $cookie, $curl, true);
         }
 
