@@ -10,7 +10,7 @@
     $GLOBALS['d'] = getenv('D');
 	
 	//If it does not find an enviromental variable, then it sets up defaults, 
-	//and assuming i am on my personal computer, i choose here wether i connect to linton or pamela servers. (1 old server, 2 new server)
+	//and assuming i am on my personal computer, i choose here whether i connect to linton or pamela servers. (1 old server, 2 new server)
     if($GLOBALS['server']  == false){
         $GLOBALS['server'] = 1;
     }
