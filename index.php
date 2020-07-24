@@ -1,6 +1,6 @@
 <?php
-	//These are the variables used to connect to the server, and to my account
-	//By default it takes the enviroment variable set within heroku, to make it easier to change on the fly in case i am not using my computer.
+    //These are the variables used to connect to the server, and to my account
+    //By default it takes the enviroment variable set within heroku, to make it easier to change on the fly in case i am not using my computer.
     $GLOBALS['server'] = getenv('SERVER');
     $defaultIV = getenv('IV');
     $userHash = getenv('KEY');
@@ -8,66 +8,66 @@
     $GLOBALS['tidx'] = getenv('TIDX');
     $GLOBALS['host'] = getenv('HOST');
     $GLOBALS['d'] = getenv('D');
-	
-	//If it does not find an enviromental variable, then it sets up defaults, 
-	//and assuming i am on my personal computer, i choose here whether i connect to linton or pamela servers. (1 old server, 2 new server)
+    
+    //If it does not find an enviromental variable, then it sets up defaults, 
+    //and assuming i am on my personal computer, i choose here wether i connect to linton or pamela servers. (1 old server, 2 new server)
     if($GLOBALS['server']  == false){
         $GLOBALS['server'] = 1;
     }
     
-	//Here it sets up my account credentials to be used within the server connections further on.
-	//Old server creds
+    //Here it sets up my account credentials to be used within the server connections further on.
+    //Old server creds
     if ($GLOBALS['server'] == 1){
         if ($defaultIV == false){
-			//This value is basically the one of the passwords used to decrypt the communications betwen the server/client.
+            //This value is basically the one of the passwords used to decrypt the communications betwen the server/client.
             $defaultIV = 'yCNBH$$rCNGvC+#f';
         } 
 
         if ($userHash == false){
-			//This is the value used to authenticate your account to the server. Changes whenever you login onto a fresh install to stop people from using multiple phones at once.
-			//Not like it is hard to do that anyways... lol. Phone + multiple nox instances + this script using the same account isn't impossible, just annoying to set up.
-			//In specific it is the key to encrypt/decrypt the contents passed between server/game. Changes for every account, so you can't read other player's network traffic without this.
-			//You can only obtain this value through: 
-			//1- Memory reading (it is saved in plaintext somewhere in the memory, just use gameguardian and search for userhash. Needs root.); 
-			//2- Sniff network traffic for the first login onto a fresh install and then use the default userhash to grab the new hash being exchanged. (beware, this invalidades all other active userhashes.)
-			//3- Grab an encrypted file containing the account values within the game's folders, paste it onto a rooted device's game folder and then read it's memory (Doesn't need root, can be pasted onto a nox virtual device, useful on pre-set accounts on unrooted devices)
+            //This is the value used to authenticate your account to the server. Changes whenever you login onto a fresh install to stop people from using multiple phones at once.
+            //Not like it is hard to do that anyways... lol. Phone + multiple nox instances + this script using the same account isn't impossible, just annoying to set up.
+            //In specific it is the key to encrypt/decrypt the contents passed between server/game. Changes for every account, so you can't read other player's network traffic without this.
+            //You can only obtain this value through: 
+            //1- Memory reading (it is saved in plaintext somewhere in the memory, just use gameguardian and search for userhash. Needs root.); 
+            //2- Sniff network traffic for the first login onto a fresh install and then use the default userhash to grab the new hash being exchanged. (beware, this invalidades all other active userhashes.)
+            //3- Grab an encrypted file containing the account values within the game's folders, paste it onto a rooted device's game folder and then read it's memory (Doesn't need root, can be pasted onto a nox virtual device, useful on pre-set accounts on unrooted devices)
             $userHash = '061dd115161aff9d956bba80768c9332-0';
         } 
 
         if ($cookie == false){
-			//Another value used in authentication
+            //Another value used in authentication
             $cookie = 'e1f6a65336c7b896bcbfc0bc06b39099%4A1';
         } 
 
         if ($GLOBALS['tidx'] == false){
-			//Value used to check the version of the content inside the app, bit complicated but the short is that this goes up every time new content is put in the server, then the app downloads it if the numbers don't match
+            //Value used to check the version of the content inside the app, bit complicated but the short is that this goes up every time new content is put in the server, then the app downloads it if the numbers don't match
             $GLOBALS['tidx'] = '163';
         } 
 
         if ($GLOBALS['host'] == false){
-			//Old server address, used to talk to the game.
+            //Old server address, used to talk to the game.
             $GLOBALS['host'] = 'http://appprd.dragonproject.gogame.net/ajax/';
         }
 
         if ($GLOBALS['d'] == false){
-			//Uh, i forgot where this is from... Another bit of authentication i suppose, not really important. Copying the value used in the app is good enough.
+            //Uh, i forgot where this is from... Another bit of authentication i suppose, not really important. Copying the value used in the app is good enough.
             $GLOBALS['d'] = 'bb6542934b7e8b9ca8f6e067a0b2b79b6eaa470bba2c66c33f7ef47303172a02a20218166a4b8fce62c6b3a2b30046ed-0';
         }
-		
-		//This is a list of item IDs i selected,
-		//A function that automatically perfectly rerolls abilities in items uses this as an item list to go through.
-		//I manually list the items here since having the program automatically fetch them was annoying just thinking about it...
-		//Every time you open the game it gives you a giant list of crap in your account to get your app from zero to having everything in your account, (anything you can think of, items, magis, potions, money, options, etc, etc)
-		//Older accounts have this list be literal >100k lines long. And given to you all at once. Fucking ridiculous just thinking about it.
+        
+        //This is a list of item IDs i selected,
+        //A function that automatically perfectly rerolls abilities in items uses this as an item list to go through.
+        //I manually list the items here since having the program automatically fetch them was annoying just thinking about it...
+        //Every time you open the game it gives you a giant list of crap in your account to get your app from zero to having everything in your account, (anything you can think of, items, magis, potions, money, options, etc, etc)
+        //Older accounts have this list be literal >100k lines long. And given to you all at once. Fucking ridiculous just thinking about it.
         $equipArray = array(
             "1080534",
-			"1080535",
-			"1080536",
-			"1080537",
-			"1080545",);
+            "1080535",
+            "1080536",
+            "1080537",
+            "1080545",);
     }
-	
-	//New server creds. Everything is the same as old server creds, just a different account.
+    
+    //New server creds. Everything is the same as old server creds, just a different account.
     if ($GLOBALS['server'] == 2){
         if ($defaultIV == false){
             $defaultIV = 'yCNBH$$rCNGvC+#f';
@@ -96,14 +96,14 @@
         $equipArray = array(
         );
     }
-	
-	//Doesn't really matter if my credentials go out there, they change every time you login your account onto a fresh install of the game (even a cleared cache resets it)
-	//So it is essential to capture the user hash & cookie values from whatever account you're trying to spoof.
-	//One account is banned and i don't use the other anymore. Whatever...
+    
+    //Doesn't really matter if my credentials go out there, they change every time you login your account onto a fresh install of the game (even a cleared cache resets it)
+    //So it is essential to capture the user hash & cookie values from whatever account you're trying to spoof.
+    //One account is banned and i don't use the other anymore. Whatever...
     
 
     /* -----============== Basic tools ==============----- */
-	//I use this as a generic print function since i need to both print onto heroku's HTML console and my PC's command prompt.
+    //I use this as a generic print function since i need to both print onto heroku's HTML console and my PC's command prompt.
     function println ($string_message) {
         if(!isset($_SERVER['SERVER_PROTOCOL'])){
             print "$string_message\n";
@@ -111,13 +111,13 @@
             $_SERVER['SERVER_PROTOCOL'] ? print "$string_message<br />" : print "$string_message\n";
         }
     }
-	
-	//Converts string to base64 format.
+    
+    //Converts string to base64 format.
     function toBase64($string){
         return base64_encode($string);
     }
-	
-	//Converts base64 string to plain text
+    
+    //Converts base64 string to plain text
     function fromBase64($string){
         return base64_decode($string);
     }
@@ -159,8 +159,8 @@
     }
 
     //Takes plain string and returns raw compressed
-	//This is one of the steps needed to impersonate the server on the phone's app... not used since this is not the objective of this program. 
-	//But is is useful to know hijacking responses is possible, but i forgot in which bits of the game this is useful... Stole the server response to a roll and set it all as SSS behemoths just to sate curiosity, but it's only visual anyways.
+    //This is one of the steps needed to impersonate the server on the phone's app... not used since this is not the objective of this program. 
+    //But is is useful to know hijacking responses is possible, but i forgot in which bits of the game this is useful... Stole the server response to a roll and set it all as SSS behemoths just to sate curiosity, but it's only visual anyways.
     function compress($string){
         return zlib_encode($string);
     }
@@ -246,14 +246,14 @@
     }
 
     /* -----============== Basic routines ==============----- */
-	//These methods are the very base of communications between the game and the server.
-	//Game -> Server; The game needs to pass a json string onto an aes256 encryption before passing it onto the server.
-	//Server -> Game; The game needs to use the aes256 decryption, inflate the compressed string using zlib, then either convert it from base64 onto JSON or use as is, depends on what you are doing, to understand what the server said.
-	
-	
+    //These methods are the very base of communications between the game and the server.
+    //Game -> Server; The game needs to pass a json string onto an aes256 encryption before passing it onto the server.
+    //Server -> Game; The game needs to use the aes256 decryption, inflate the compressed string using zlib, then either convert it from base64 onto JSON or use as is, depends on what you are doing, to understand what the server said.
+    
+    
     //Takes returned server hash, decrypts, inflates, prettifies and returns a prettified JSON String
-	//Used to convert a server response into readable text.
-	//The encryption routine was just so annoying to figure out... ugh
+    //Used to convert a server response into readable text.
+    //The encryption routine was just so annoying to figure out... ugh
     function serverToUserDecrypt($hash, $defaultIV, $userHash){
         $decryptRaw = aes256CBCDecrypt($hash, $userHash, $defaultIV);
         $stringInflated = inflate($decryptRaw);
@@ -261,7 +261,7 @@
     }
 
     //Takes a JSON String, minifies, encrypts and returns a base64 hash
-	//Used to convert a string onto an encrypted hash the server can use.
+    //Used to convert a string onto an encrypted hash the server can use.
     function userToServerEncrypt($string, $defaultIV, $userHash){
         $string = jsonMinify($string);
         $encryptedHash = aes256CBCEncrypt($string, $userHash, $defaultIV);
@@ -269,10 +269,10 @@
     }
 
     /* -----============== Complex Tasks ==============----- */
-	//I had too many things in my gift box for various reasons... (literally >20k pages at one point lol)
-	//This function goes page by page of my giftbox and redeems everything that is not an exeption.
-	//The exceptions are treated inside the function (gems,tickets,magis,etc...) and wether each exception is active changes on personal preference,
-	//Sometimes i have too many tickets, sometimes i want to print screen all of my gift box gems all at once, sometimes i want to check what magis i've won after 10k rolls on the vault.
+    //I had too many things in my gift box for various reasons... (literally >20k pages at one point lol)
+    //This function goes page by page of my giftbox and redeems everything that is not an exeption.
+    //The exceptions are treated inside the function (gems,tickets,magis,etc...) and wether each exception is active changes on personal preference,
+    //Sometimes i have too many tickets, sometimes i want to print screen all of my gift box gems all at once, sometimes i want to check what magis i've won after 10k rolls on the vault.
     function redeemGiftBoxItems($page, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"page":'.$page.'}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
@@ -387,8 +387,8 @@
         }
     }
 
-	//Basically the same as the above, but instead of redeeming things, it just thrawls through and saves the item names i want inside a text file/prints onto the console.
-	//Like i said, 20k pages and i wanna know if any good magi or tablet is inside for me to brag about.
+    //Basically the same as the above, but instead of redeeming things, it just thrawls through and saves the item names i want inside a text file/prints onto the console.
+    //Like i said, 20k pages and i wanna know if any good magi or tablet is inside for me to brag about.
     function listRelevantItems($page, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"page":'.$page.'}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
@@ -424,10 +424,10 @@
             return null;
         }
     }
-	
-	//Takes an item ID and rerolls the selected ability (each item has many abilities, each ability has an ID number) onto a perfect roll.
-	//Always rolls for max +/+ values for selected ability, works if it is one, 2 or even 3+ rollable ability items at once (Some older items have 3 rollable abilities, spooky, this has no real limit). 
-	//One of my neatest creations if i do say so myself. This rolls literally as fast as the server lets me, so it uses money real quick. Good way to get rid of the vault gold that piles up so fast.
+    
+    //Takes an item ID and rerolls the selected ability (each item has many abilities, each ability has an ID number) onto a perfect roll.
+    //Always rolls for max +/+ values for selected ability, works if it is one, 2 or even 3+ rollable ability items at once (Some older items have 3 rollable abilities, spooky, this has no real limit). 
+    //One of my neatest creations if i do say so myself. This rolls literally as fast as the server lets me, so it uses money real quick. Good way to get rid of the vault gold that piles up so fast.
     function rerollPerfectAbility($plainRequest, $aid, $maxap, $defaultIV, $userHash, $cookie, $curl, $euid){
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
         $rerollResult = requestTemplate($encryptedRequestHash, 'smith/changeability', $cookie, $curl);
@@ -467,10 +467,10 @@
         }
     }
 
-	//Takes one specific potion ID and just drinks it all.
-	//The login setup is stupid and the server hands an incredibly long list of options and item numbers for the account each time you open the game (mine had over 100k lines at one point), older accounts suffer the risk of being unable to login due to the list being literally too big to be handled by the server, so instead of the list the server just hands you the error (hahaha, hilarious)
-	//Anything with an expiration date is treated as an individual item and uses a large amount of space in the list (instead of Item ID: 123 - Has 37 of these; they go item 1 - expires date XXX, item 2 - expires date XXY; Even though item 1 & 2 are the same type of item.)
-	//Hunter potions (And tickets) are one of those expensive (login wise) items, spamming the vault basically gave me >10k per week of every potion so i had to just dump them down the drain or risk being locked out of the game and needing to delete items blindly through my program to regain access.
+    //Takes one specific potion ID and just drinks it all.
+    //The login setup is stupid and the server hands an incredibly long list of options and item numbers for the account each time you open the game (mine had over 100k lines at one point), older accounts suffer the risk of being unable to login due to the list being literally too big to be handled by the server, so instead of the list the server just hands you the error (hahaha, hilarious)
+    //Anything with an expiration date is treated as an individual item and uses a large amount of space in the list (instead of Item ID: 123 - Has 37 of these; they go item 1 - expires date XXX, item 2 - expires date XXY; Even though item 1 & 2 are the same type of item.)
+    //Hunter potions (And tickets) are one of those expensive (login wise) items, spamming the vault basically gave me >10k per week of every potion so i had to just dump them down the drain or risk being locked out of the game and needing to delete items blindly through my program to regain access.
     function chugPotion($chugId, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"uid":"'.$chugId.'"}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
@@ -494,11 +494,11 @@
         }
     }
 
-	//This thrawls through my gift box and dupes the selected items.
-	//If you redeemed the same item in the gift box multiple times at once, the server would give you the item as many times as you could fit in the request. It never checked wheter the second or third item you were redeeming had already been claimed if it happened before it finished redeeming everything (hahaha)
-	//After a bit they caught on and limited it to 10 items at once (instead of duping one "5 gems" gift box entry 500 times, i could only do it 10 times). How sad.
-	//A few weeks before i got banned they caught on and simply discarted any repeat ID number inside each request. I tried to get around it using a few PHP json string -> number trickery but they checked it at a latter part of the process so it wasn't feasible.
-	//So this doesn't work anymore.
+    //This thrawls through my gift box and dupes the selected items.
+    //If you redeemed the same item in the gift box multiple times at once, the server would give you the item as many times as you could fit in the request. It never checked wheter the second or third item you were redeeming had already been claimed if it happened before it finished redeeming everything (hahaha)
+    //After a bit they caught on and limited it to 10 items at once (instead of duping one "5 gems" gift box entry 500 times, i could only do it 10 times). How sad.
+    //A few weeks before i got banned they caught on and simply discarted any repeat ID number inside each request. I tried to get around it using a few PHP json string -> number trickery but they checked it at a latter part of the process so it wasn't feasible.
+    //So this doesn't work anymore.
     function dupePresents($presents, $defaultIV, $userHash, $cookie, $curl){
         foreach ($presents as $present){
             /*if ($present["itemId"] == 1200000){
@@ -553,16 +553,16 @@
 
     }
 
-	//Basically... Well, it kills behemohts in a few different ways.
-	//Put in a quest ID number here (each behemoth battle has its own quest ID, be it a summon, a shadow, a behemoth between map regions, an expedition behemoth, etc. Just gotta find the number of whatever you need killing.)
-	//Put in the amount of times you want to have it be killed, then it'll go though the slaying process.
-	//There is a list of things that must be done for each battle, and this process can only go start->finish one at a time per account, that's why you cannot play the game on multiple devices
-	//Each time you start a battle it cancels the old one, so you can only kill one behemoth at a time, unfortunate.
-	//Shadow behemoths can be killed an infinite number of times if you go through this and ignore the greyed out button in the game, the server doesnt check wether you're done with them or not.
-	//Quest behemoths (those between areas) can also be killed an infinite number of times, you just can't access them. It was useful in farming EXP & Gold through selling behemoth items.
-	//Also useful in farming HC tower points & crafting materials to be sold, just select some behemoth and leave your hunter to kill it all night long.
-	//Snugly inside of this is also incorporated another function, before every kill it checks the guild hunter slots, claims any complete behemoth and then refills it with your summoned behemoths. Absolutely excellent way of burning through those annoying A & B rank fodder
-	//Also proud of this one.
+    //Basically... Well, it kills behemohts in a few different ways.
+    //Put in a quest ID number here (each behemoth battle has its own quest ID, be it a summon, a shadow, a behemoth between map regions, an expedition behemoth, etc. Just gotta find the number of whatever you need killing.)
+    //Put in the amount of times you want to have it be killed, then it'll go though the slaying process.
+    //There is a list of things that must be done for each battle, and this process can only go start->finish one at a time per account, that's why you cannot play the game on multiple devices
+    //Each time you start a battle it cancels the old one, so you can only kill one behemoth at a time, unfortunate.
+    //Shadow behemoths can be killed an infinite number of times if you go through this and ignore the greyed out button in the game, the server doesnt check wether you're done with them or not.
+    //Quest behemoths (those between areas) can also be killed an infinite number of times, you just can't access them. It was useful in farming EXP & Gold through selling behemoth items.
+    //Also useful in farming HC tower points & crafting materials to be sold, just select some behemoth and leave your hunter to kill it all night long.
+    //Snugly inside of this is also incorporated another function, before every kill it checks the guild hunter slots, claims any complete behemoth and then refills it with your summoned behemoths. Absolutely excellent way of burning through those annoying A & B rank fodder
+    //Also proud of this one.
     function ripNTear($qId, $qNum, $defaultIV, $userHash, $cookie, $curl, $isShadow = false){
         $questNr = 0;
         $error = 0;
@@ -822,9 +822,9 @@
         return true;
     }
 
-	//Put in how many gams and tickets you have (needs to be exact otherwise the game gives you an error) and this will automatically pull onto a selected banner (you need to sniff the network traffic to figure out the banner ID you want to pull) until you run out of gems or tickets.
-	//I had too many tickets to i used this to just dump them onto banners. This unfortunately led me to have too many behemoths in my gift box, double edged sword.
-	//I basically pulled all of my banners using this, the manual pull process gets annoying once you have an infinite number of gems/tickets... lol
+    //Put in how many gams and tickets you have (needs to be exact otherwise the game gives you an error) and this will automatically pull onto a selected banner (you need to sniff the network traffic to figure out the banner ID you want to pull) until you run out of gems or tickets.
+    //I had too many tickets to i used this to just dump them onto banners. This unfortunately led me to have too many behemoths in my gift box, double edged sword.
+    //I basically pulled all of my banners using this, the manual pull process gets annoying once you have an infinite number of gems/tickets... lol
     function pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie){
         $plainRequest = '{"id":'.$bId.',"crystalCL":'.$gems.',"ticketCL":'.$tickets.',"productId":"","guaranteeCampaignType":0,"guaranteeCampaignId":0,"guaranteeRemainCount":0,"guaranteeUserCount":0,"useStepUpTicket":0,"seriesId":-1}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
@@ -847,7 +847,7 @@
         }
     }
 
-	//Tells the server to claim all of the complete behemoths inside of the hunter slots. Simple.
+    //Tells the server to claim all of the complete behemoths inside of the hunter slots. Simple.
     function claimAll($defaultIV, $userHash, $cookie, $curl){
         $claimResult = requestTemplate(null, 'guild-request/complete-all', $cookie, $curl);
 
@@ -869,8 +869,8 @@
             }
         }
     }
-	
-	//Uses the supplied behemoth ID (needs to be a summoned behemoth... actually i never tested wether this works with other behemoths, huh, i'll never know) and tells the server to start it onto the selected hunter slot
+    
+    //Uses the supplied behemoth ID (needs to be a summoned behemoth... actually i never tested wether this works with other behemoths, huh, i'll never know) and tells the server to start it onto the selected hunter slot
     function guildQuestStart($qid, $slotNr, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"slotNo":'.$slotNr.',"questId":'.$qid.',"num":1,"isQuestItem":1}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
@@ -894,8 +894,8 @@
             }
         }
     }
-	
-	//Claims the rewards of one hunter slot in specific if it has been completed.
+    
+    //Claims the rewards of one hunter slot in specific if it has been completed.
     function guildQuestComplete($slotNr, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"slotNo":'.$slotNr.'}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
@@ -919,8 +919,8 @@
             }
         }
     }
-	
-	//Basically just asks the server if it is still online. Had to use it on a test but this isn't useful for anything anymore.
+    
+    //Basically just asks the server if it is still online. Had to use it on a test but this isn't useful for anything anymore.
     function checkAlive($defaultIV, $userHash, $cookie){
         $aliveResult = requestTemplate(null, 'status/alive', $cookie);
 
@@ -939,10 +939,10 @@
         }
     }
 
-	//Not very dynamic, basically crafts items, but since i only really had to spam craft a single item ever i just manually encrypted the item ID, tablet, etc to be sent to the server.
-	//Why? This is spicy, basically there were a few items that when transformed back into their tablets (Tablet reforge worked if you talked directly to the server, they just never implemented the button inside of the game hahaha) instead of giving up the item, returned a development item.
-	//This item was basically an "anything tablet", i could craft literally any SS or SSS equipment in the game with it. I basically spent ungodly amounts of gems/tickets onto... SSS valdemere if i recall correctly? crafted the helmed and then reforged it back into it's tablet form to receive the dev item.
-	//I made a few fun weapons in the new server, like the lightning and water oracle dual blades set when people only had access to normal type weapons in linton server, haha hilarious.
+    //Not very dynamic, basically crafts items, but since i only really had to spam craft a single item ever i just manually encrypted the item ID, tablet, etc to be sent to the server.
+    //Why? This is spicy, basically there were a few items that when transformed back into their tablets (Tablet reforge worked if you talked directly to the server, they just never implemented the button inside of the game hahaha) instead of giving up the item, returned a development item.
+    //This item was basically an "anything tablet", i could craft literally any SS or SSS equipment in the game with it. I basically spent ungodly amounts of gems/tickets onto... SSS valdemere if i recall correctly? crafted the helmed and then reforged it back into it's tablet form to receive the dev item.
+    //I made a few fun weapons in the new server, like the lightning and water oracle dual blades set when people only had access to normal type weapons in linton server, haha hilarious.
     function craft($cookie, $curl){
         $claimResult = requestTemplate("V2j2a5viWDRpIwX2xkm1b7SOj1s5SdXFgpXkQdkD6Dc=", 'smith/create', $cookie, $curl);
         //$claimResult = requestTemplate("t3yrsSTUcxk2WrcB/8kotwr1+Hg8Yq1J95431dfaucE=", 'smith/create', $cookie, $curl);
@@ -950,7 +950,7 @@
         return true;
     }
 
-	//This never really worked, i thought about running though all of the quest ids (they're all unique, even the daily quests) and then trying to claim each and every one of them incase i had unclaimed rewards from the past. Never really went anywhere.
+    //This never really worked, i thought about running though all of the quest ids (they're all unique, even the daily quests) and then trying to claim each and every one of them incase i had unclaimed rewards from the past. Never really went anywhere.
     function QuestComplete($qNr, $defaultIV, $userHash, $curl){
         $rcToken1 = genRcToken();
         $body = "data=".urlencode(aes256CBCEncrypt('{"uId":"'.$qNr.'"}', $userHash, $defaultIV))."&app=rob&rcToken=$rcToken1";
@@ -990,9 +990,9 @@
         return true;
     }
 
-	//This is a spicy one...
-	//This basically recreates any one arena run i've captured through a network sniffer and spams it as fast as is can.
-	//Very useful to farm gold/exp/shop points when you're fighting the SSS arena level behemoths. You're basically killing a lv 900 behemoth per second, chug some 5x exp & gold potions and that's some good loot.
+    //This is a spicy one...
+    //This basically recreates any one arena run i've captured through a network sniffer and spams it as fast as is can.
+    //Very useful to farm gold/exp/shop points when you're fighting the SSS arena level behemoths. You're basically killing a lv 900 behemoth per second, chug some 5x exp & gold potions and that's some good loot.
     function arenaComplete($defaultIV, $userHash, $cookie, $curl){
         $token = genRcToken();
         $plainRequest = '{"aid": 23006,"qid": 910000000,"qt": "'.$token.'","setNo": 0}';
@@ -1108,10 +1108,10 @@
         return true;
     }
     
-	/* -----============== Process Starters ==============----- */
-	//This area is where it sets up the process needed for each individual routine (like grabbing IDs, iterating through lists, etc)
-	
-	//Grabs the original set ability for the selected equipment, the max value for it and rerolls until it is perfect.
+    /* -----============== Process Starters ==============----- */
+    //This area is where it sets up the process needed for each individual routine (like grabbing IDs, iterating through lists, etc)
+    
+    //Grabs the original set ability for the selected equipment, the max value for it and rerolls until it is perfect.
     function rerollPerfectProcessStart($euid, $aNbr = 0, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
         $plainRequest = '{"euid":"'.$euid.'"}';
@@ -1152,8 +1152,8 @@
             println('ERROR: '.$jsonResponse["error"]);
         }
     }
-	
-	//Sets up the starting page for the gift box item listing function, also saves the relevant items onto a TXT once found.
+    
+    //Sets up the starting page for the gift box item listing function, also saves the relevant items onto a TXT once found.
     function listRelevantItemsProcess($startingPage, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
         for($i = $startingPage; $i <= ($startingPage+6000); $i){
@@ -1187,8 +1187,8 @@
         println($log);
         file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
     }
-	
-	//Sets up the starting page for the gift box item redeeming function. Assists the process by deciding wether the selected page still has redeemable items or should be skipped (items get backfilled onto the page once you redeem something)
+    
+    //Sets up the starting page for the gift box item redeeming function. Assists the process by deciding wether the selected page still has redeemable items or should be skipped (items get backfilled onto the page once you redeem something)
     function redeemProcessStart($startingPage, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
         for($i = $startingPage; $i <= ($startingPage+6000); $i){
@@ -1216,7 +1216,7 @@
         println("Ultima página processada: ".$i);
     }
 
-	//Contains a few potion IDS to be selected for ease of use (so i dont have to fucking find the numbers every time) but also has an option for a custom ID just in case, then goes and starts the potion drinking.
+    //Contains a few potion IDS to be selected for ease of use (so i dont have to fucking find the numbers every time) but also has an option for a custom ID just in case, then goes and starts the potion drinking.
     function chugProcessStart($defaultIV, $userHash, $cookie, $id = null){
         $curl = curl_init();
         //1909124 old  sv hunter elixir
@@ -1258,8 +1258,8 @@
         println("Ultima pocao chugada: ".$i);
     }
 
-	//Sets up the first page to kickstart the dupe process (either first page or whatver is chosen) then controlls wether it proceeds to the next page or keeps duping the present one.
-	//Defunct, this dupe was patched.
+    //Sets up the first page to kickstart the dupe process (either first page or whatver is chosen) then controlls wether it proceeds to the next page or keeps duping the present one.
+    //Defunct, this dupe was patched.
     function dupeProcessStart($defaultIV, $userHash, $cookie, $pgStart = 0, $pgEnd = 900){
         $collectedAtLeastOnce = false;
         for($i = $pgStart; $i <= $pgEnd; $i++){
@@ -1297,8 +1297,8 @@
             }
         }
     }
-	
-	//Starts up a process to kill all of the summonned behemoths you own. Goes until you stop it, or it kills everything. Edgy when you think of it.
+    
+    //Starts up a process to kill all of the summonned behemoths you own. Goes until you stop it, or it kills everything. Edgy when you think of it.
     function massacreProcessStart($defaultIV, $userHash, $cookie){
         while(true){
             $curl = curl_init();
@@ -1339,7 +1339,7 @@
         }
     }
 
-	//Similar to the above one, but instead of your summonned behemoth, it kills a selected behemoth (quest, HC tower, summon, etc) X amount of times. kills until you tell it to stop if you input 0 times.
+    //Similar to the above one, but instead of your summonned behemoth, it kills a selected behemoth (quest, HC tower, summon, etc) X amount of times. kills until you tell it to stop if you input 0 times.
     function killProcessStart($defaultIV, $userHash, $cookie, $number, $mId){
         $curl = curl_init();
 
@@ -1363,8 +1363,8 @@
 
         println("\nDone.");
     }
-	
-	//This basically controlls the remaining gems/tickets when pulling behemoths, goes until you run out or tell it to stop.
+    
+    //This basically controlls the remaining gems/tickets when pulling behemoths, goes until you run out or tell it to stop.
     function pullProcessStart($defaultIV, $userHash, $cookie, $bId, $tickets, $gems, $type = null){
         $curl = curl_init();
 
@@ -1399,9 +1399,9 @@
         }
     }
 
-	//Unfinished business. The idea was to check ange's pirate shop for useful items, and buy it before anyone else.
-	//Never went anywhere because it was annoying to set up something to automagically check every time the shop reset.
-	//And i was drowning in tickets anyways, so who cares.
+    //Unfinished business. The idea was to check ange's pirate shop for useful items, and buy it before anyone else.
+    //Never went anywhere because it was annoying to set up something to automagically check every time the shop reset.
+    //And i was drowning in tickets anyways, so who cares.
     /*function pirateProcessStart($defaultIV, $userHash, $cookie){
         $curl = curl_init();
         $encryptedRequestHash = userToServerEncrypt('', $defaultIV, $userHash);
@@ -1426,11 +1426,11 @@
     }*/
 
     /* -----============== Console Controller ==============----- */
-	//This is the bit that receives the command and starts up the relevant process, with the chosen options.
-	
+    //This is the bit that receives the command and starts up the relevant process, with the chosen options.
+    
     switch ($argv[1]){
-		
-		//Redeems all chosen item types, starts on selected page.
+        
+        //Redeems all chosen item types, starts on selected page.
         case "redeem":
             if (isset($argv[2])){
                 redeemProcessStart($argv[2], $defaultIV, $userHash, $cookie);
@@ -1439,8 +1439,8 @@
             }
 
         break;
-		
-		//Lists all chosen item types, starts on selected page.
+        
+        //Lists all chosen item types, starts on selected page.
         case "list":
             if (isset($argv[2])){
                 listRelevantItemsProcess($argv[2], $defaultIV, $userHash, $cookie);
@@ -1448,9 +1448,9 @@
                 listRelevantItemsProcess(0, $defaultIV, $userHash, $cookie);
             }
         break;
-		
-		//Rerolls an item untill it has perfect abilities. Can either choose specific ability ID or leave it to choose the first one (most items have the original ability be the first, but some have better abilities on the other options, like magic charge on gryllen ~ez +5/+5 perfect set hehe~ or the second original ability on revamped mercurius)
-		//This can be done in parallel... grab a bunch of item IDs at once and start up multiple processes to reroll a bunch of crap at once, much faster than one at a time.
+        
+        //Rerolls an item untill it has perfect abilities. Can either choose specific ability ID or leave it to choose the first one (most items have the original ability be the first, but some have better abilities on the other options, like magic charge on gryllen ~ez +5/+5 perfect set hehe~ or the second original ability on revamped mercurius)
+        //This can be done in parallel... grab a bunch of item IDs at once and start up multiple processes to reroll a bunch of crap at once, much faster than one at a time.
         case "reroll":
             if (isset($argv[2]) && isset($argv[3])){
                 rerollPerfectProcessStart($argv[2], $argv[3], $defaultIV, $userHash, $cookie);
@@ -1458,8 +1458,8 @@
                 rerollPerfectProcessStart($argv[2], 0, $defaultIV, $userHash, $cookie);
             }
         break;
-		
-		//Drinks selected potion untill it is empty. Can choose which potion to drink.
+        
+        //Drinks selected potion untill it is empty. Can choose which potion to drink.
         case "chug":
             if (isset($argv[2])){
                 chugProcessStart($defaultIV, $userHash, $cookie, $argv[2]);
@@ -1467,8 +1467,8 @@
                 chugProcessStart($defaultIV, $userHash, $cookie, null);
             }
         break;
-		
-		//Dupes all chosen item types, starts on selected page. Doesn't work anymore.
+        
+        //Dupes all chosen item types, starts on selected page. Doesn't work anymore.
         case "dupe":
             if (isset($argv[2]) && isset($argv[3])){
                 dupeProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3]);
@@ -1476,13 +1476,13 @@
                 dupeProcessStart($defaultIV, $userHash, $cookie);
             }
         break;
-		
-		//The pirate process... never finished cause it was moot.
+        
+        //The pirate process... never finished cause it was moot.
         /*case "pirate":
             pirateProcessStart($defaultIV, $userHash, $cookie);
-		break;*/
-		
-		//Kills a specific behemoth X times if you tell it to or just starts the summon behemoth slaugher if you don't choose anything.
+        break;*/
+        
+        //Kills a specific behemoth X times if you tell it to or just starts the summon behemoth slaugher if you don't choose anything.
         case "massacre":
             if (isset($argv[2]) && isset($argv[3])){
                 killProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3]);
@@ -1490,8 +1490,8 @@
                 massacreProcessStart($defaultIV, $userHash, $cookie);
             }
         break;
-		
-		//Pulls onto a banner using either gems by default, or tickets if you tell it to. Needs to have accurate starting gem/tix numbers to work.
+        
+        //Pulls onto a banner using either gems by default, or tickets if you tell it to. Needs to have accurate starting gem/tix numbers to work.
         case "pull":
             if (!isset($argv[5])){
                 pullProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3], $argv[4]);
@@ -1499,9 +1499,9 @@
                 pullProcessStart($defaultIV, $userHash, $cookie, $argv[2], $argv[3], $argv[4], $argv[5]);
             }
         break;
-		
-		//Uses the equipment list set up in the start of this program and sets up an automatic process to do a perfect reroll on each and every one of them.
-		//If you grab all items its gonna roll all of the A/B/S rank crap and it'll use a lot of gold. It is neat having a fully perfect rolled account, shows true wealth when you collect even S rank sets and they're all perfect hehe.
+        
+        //Uses the equipment list set up in the start of this program and sets up an automatic process to do a perfect reroll on each and every one of them.
+        //If you grab all items its gonna roll all of the A/B/S rank crap and it'll use a lot of gold. It is neat having a fully perfect rolled account, shows true wealth when you collect even S rank sets and they're all perfect hehe.
         case "bigReroll":
             $i = 0;
             $offset = 0;
@@ -1520,8 +1520,8 @@
                 $i++;
             }
         break;
-		
-		//Basically runs through all existing quests and tries to claim them in case the game lets me grab old, unclaimed rewards from past quests. Not sure if it works, never bothered with it since i thought it was pointless halfway, lol.
+        
+        //Basically runs through all existing quests and tries to claim them in case the game lets me grab old, unclaimed rewards from past quests. Not sure if it works, never bothered with it since i thought it was pointless halfway, lol.
         case "questSpam":
             $time1 = microtime(true);
             $i = 0;
@@ -1537,9 +1537,9 @@
                 QuestComplete($i, $defaultIV, $userHash, $curl);
             }
         break;
-		
-		//This... uh, tries to use multithreaded requests to spam claim the same quest as many times as i can at once...
-		//Ya know, just in case i can claim the same quest multiple times if i ask fast enough. Valiant effort but it never worked. Good study onto how multithreaded processing works though.
+        
+        //This... uh, tries to use multithreaded requests to spam claim the same quest as many times as i can at once...
+        //Ya know, just in case i can claim the same quest multiple times if i ask fast enough. Valiant effort but it never worked. Good study onto how multithreaded processing works though.
         case "ree":
             $max=5000000;
             $step = 5;
@@ -1600,10 +1600,10 @@
             // Finalizando
             curl_multi_close($mh);
         break;
-		
-		//Runs a pre-recorded arena run multiple times for the loot.
-		//Needs to be pre-recorded for it to be beliveable, since arena runs are recorded and analyzed then i couldn't leave it to be auto-filled like behemoth runs and have the damage numbers/movements/skills used/etc not match up the remaining run time.
-		//Funny how i got banned for an actual legit arena run, after doing all of this insane crap and getting away with it, hahaha.
+        
+        //Runs a pre-recorded arena run multiple times for the loot.
+        //Needs to be pre-recorded for it to be beliveable, since arena runs are recorded and analyzed then i couldn't leave it to be auto-filled like behemoth runs and have the damage numbers/movements/skills used/etc not match up the remaining run time.
+        //Funny how i got banned for an actual legit arena run, after doing all of this insane crap and getting away with it, hahaha.
         case "svOneArena":
             $total = 100;
 
