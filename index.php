@@ -822,7 +822,8 @@
         return true;
     }
 
-    //Put in how many gams and tickets you have (needs to be exact otherwise the game gives you an error) and this will automatically pull onto a selected banner (you need to sniff the network traffic to figure out the banner ID you want to pull) until you run out of gems or tickets.
+    //Put in how many gams and tickets you have (needs to be exact otherwise the game gives you an error) and this will automatically pull onto a selected banner (you need to sniff the network traffic to figure out the banner ID you want to pull.) until you run out of gems or tickets.
+    //I never bothered automating the cash detection since the inventory request was so annying... (see comments in chugPotion() )
     //I had too many tickets to i used this to just dump them onto banners. This unfortunately led me to have too many behemoths in my gift box, double edged sword.
     //I basically pulled all of my banners using this, the manual pull process gets annoying once you have an infinite number of gems/tickets... lol
     function pullBanner($bId, $tickets, $gems, $defaultIV, $userHash, $cookie){
@@ -870,7 +871,7 @@
         }
     }
     
-    //Uses the supplied behemoth ID (needs to be a summoned behemoth... actually i never tested wether this works with other behemoths, huh, i'll never know) and tells the server to start it onto the selected hunter slot
+    //Uses the supplied behemoth ID (needs to be a summoned behemoth... actually i never tested whether this works with other behemoths, huh, guess i'll never know!) and tells the server to start it onto the selected hunter slot
     function guildQuestStart($qid, $slotNr, $defaultIV, $userHash, $cookie, $curl){
         $plainRequest = '{"slotNo":'.$slotNr.',"questId":'.$qid.',"num":1,"isQuestItem":1}';
         $encryptedRequestHash = userToServerEncrypt($plainRequest, $defaultIV, $userHash);
@@ -950,7 +951,7 @@
         return true;
     }
 
-    //This never really worked, i thought about running though all of the quest ids (they're all unique, even the daily quests) and then trying to claim each and every one of them incase i had unclaimed rewards from the past. Never really went anywhere.
+    //This never really worked, i thought about running through all of the quest ids (they're all unique, even the daily quests) and then trying to claim each and every one of them incase i had unclaimed rewards from the past. Never really went anywhere. Too many IDs.
     function QuestComplete($qNr, $defaultIV, $userHash, $curl){
         $rcToken1 = genRcToken();
         $body = "data=".urlencode(aes256CBCEncrypt('{"uId":"'.$qNr.'"}', $userHash, $defaultIV))."&app=rob&rcToken=$rcToken1";
@@ -991,7 +992,7 @@
     }
 
     //This is a spicy one...
-    //This basically recreates any one arena run i've captured through a network sniffer and spams it as fast as is can.
+    //This basically recreates any one arena run i've captured through a network sniffer and spams it as fast as it can.
     //Very useful to farm gold/exp/shop points when you're fighting the SSS arena level behemoths. You're basically killing a lv 900 behemoth per second, chug some 5x exp & gold potions and that's some good loot.
     function arenaComplete($defaultIV, $userHash, $cookie, $curl){
         $token = genRcToken();
@@ -1188,7 +1189,7 @@
         file_put_contents('./log_'.date("j.n.Y").'.txt', $log."\n", FILE_APPEND);
     }
     
-    //Sets up the starting page for the gift box item redeeming function. Assists the process by deciding wether the selected page still has redeemable items or should be skipped (items get backfilled onto the page once you redeem something)
+    //Sets up the starting page for the gift box item redeeming function. Assists the process by deciding whether the selected page still has redeemable items or should be skipped (items get backfilled onto the page once you redeem something)
     function redeemProcessStart($startingPage, $defaultIV, $userHash, $cookie){
         $curl = curl_init();
         for($i = $startingPage; $i <= ($startingPage+6000); $i){
@@ -1258,7 +1259,7 @@
         println("Ultima pocao chugada: ".$i);
     }
 
-    //Sets up the first page to kickstart the dupe process (either first page or whatver is chosen) then controlls wether it proceeds to the next page or keeps duping the present one.
+    //Sets up the first page to kickstart the dupe process (either first page or whatever is chosen) then controlls whether it proceeds to the next page or keeps duping the present one.
     //Defunct, this dupe was patched.
     function dupeProcessStart($defaultIV, $userHash, $cookie, $pgStart = 0, $pgEnd = 900){
         $collectedAtLeastOnce = false;
@@ -1449,7 +1450,7 @@
             }
         break;
         
-        //Rerolls an item untill it has perfect abilities. Can either choose specific ability ID or leave it to choose the first one (most items have the original ability be the first, but some have better abilities on the other options, like magic charge on gryllen ~ez +5/+5 perfect set hehe~ or the second original ability on revamped mercurius)
+        //Rerolls an item untill it has perfect abilities. Can either choose specific ability ID or leave it to choose the first one (most items have the original ability be the first, but some have better abilities on the other options, like magic charge on gryllen ~ez +5/+5 perfect set, hehe, Or the second original ability on revamped mercurius)
         //This can be done in parallel... grab a bunch of item IDs at once and start up multiple processes to reroll a bunch of crap at once, much faster than one at a time.
         case "reroll":
             if (isset($argv[2]) && isset($argv[3])){
@@ -1501,7 +1502,7 @@
         break;
         
         //Uses the equipment list set up in the start of this program and sets up an automatic process to do a perfect reroll on each and every one of them.
-        //If you grab all items its gonna roll all of the A/B/S rank crap and it'll use a lot of gold. It is neat having a fully perfect rolled account, shows true wealth when you collect even S rank sets and they're all perfect hehe.
+        //If you grab ALL items, its gonna roll all of the A/B/S rank crap and it'll use a lot of gold. It is neat having a fully perfect rolled account, shows true wealth when you collect even S rank sets and they're all perfect hehe.
         case "bigReroll":
             $i = 0;
             $offset = 0;
@@ -1539,7 +1540,7 @@
         break;
         
         //This... uh, tries to use multithreaded requests to spam claim the same quest as many times as i can at once...
-        //Ya know, just in case i can claim the same quest multiple times if i ask fast enough. Valiant effort but it never worked. Good study onto how multithreaded processing works though.
+        //Ya know, just in case i can claim the same quest multiple times if i ask fast enough. Valiant effort but it never worked. Good study onto uncerstanding how multithreaded processing works though.
         case "ree":
             $max=5000000;
             $step = 5;
