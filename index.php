@@ -494,7 +494,7 @@
         }
     }
 
-    //This thrawls through my gift box and dupes the selected items.
+    //This crawls through my gift box and dupes the selected items.
     //If you redeemed the same item in the gift box multiple times at once, the server would give you the item as many times as you could fit in the request. It never checked wheter the second or third item you were redeeming had already been claimed if it happened before it finished redeeming everything (hahaha)
     //After a bit they caught on and limited it to 10 items at once (instead of duping one "5 gems" gift box entry 500 times, i could only do it 10 times). How sad.
     //A few weeks before i got banned they caught on and simply discarted any repeat ID number inside each request. I tried to get around it using a few PHP json string -> number trickery but they checked it at a latter part of the process so it wasn't feasible.
